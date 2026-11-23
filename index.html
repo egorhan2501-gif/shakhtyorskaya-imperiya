@@ -2,400 +2,425 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Шахтёрская Империя</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#17120e">
+<title>Шахтёрская Империя 2.0</title>
 <style>
-:root {
-  --bg:#111713; --panel:#1c2820; --panel2:#26372a;
-  --gold:#e8b957; --green:#73b879; --text:#f4f0df;
-  --muted:#a7b09f; --border:#3a4b3c;
-}
 *{box-sizing:border-box}
 body{
- margin:0;background:var(--bg);color:var(--text);
- font-family:Arial,sans-serif;padding-bottom:85px
+ margin:0;background:#17120e;color:#f5e6c8;
+ font-family:Arial,sans-serif;
 }
-header{
- padding:18px 16px;background:#18231b;
- border-bottom:1px solid var(--border);
- position:sticky;top:0;z-index:5
+button{font:inherit;cursor:pointer}
+#loading{
+ position:fixed;inset:0;z-index:20;
+ display:flex;flex-direction:column;
+ justify-content:center;align-items:center;
+ background:linear-gradient(#17120e,#382416,#17120e);
 }
-h1{font-size:22px;margin:0;color:var(--gold)}
-header small{color:var(--muted)}
-.stats{
- display:grid;grid-template-columns:repeat(3,1fr);
- gap:8px;padding:12px
+.logo{font-size:35px;font-weight:900;text-align:center}
+.loadingbar{width:75%;height:9px;background:#493522;border-radius:20px;margin-top:25px;overflow:hidden}
+.loadingfill{height:100%;width:0;background:#e9a83c;animation:load 2s forwards}
+@keyframes load{to{width:100%}}
+#app{display:none;max-width:650px;margin:auto;padding:14px 12px 90px}
+.header{
+ display:flex;justify-content:space-between;align-items:center;
+ background:#302116;border:1px solid #624326;
+ border-radius:14px;padding:13px;margin-bottom:12px;
 }
-.stat,.card{
- background:var(--panel);border:1px solid var(--border);
- border-radius:14px;padding:13px
+.brand{font-weight:900;font-size:18px}
+.money{color:#ffd36a;font-weight:bold}
+.panel{
+ background:#2b2017;border:1px solid #59402a;
+ border-radius:14px;padding:14px;margin-bottom:12px;
 }
-.stat{text-align:center;font-size:13px;color:var(--muted)}
-.stat b{display:block;color:var(--gold);font-size:17px;margin-top:5px}
-main{padding:12px}
-.page{display:none}
-.page.active{display:block}
-h2{font-size:21px;margin:8px 0 14px}
-h3{margin:5px 0 9px}
-p{color:var(--muted);line-height:1.5}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-button{
- background:#354c38;color:white;border:1px solid #56775a;
- border-radius:11px;padding:12px;font-size:14px;font-weight:bold;
- cursor:pointer
-}
-button:active{transform:scale(.97)}
-button.gold{background:#80602a;border-color:var(--gold)}
-button:disabled{opacity:.4}
-.action{width:100%;margin-top:10px}
-.item{margin-bottom:10px}
-.item .row{display:flex;justify-content:space-between;gap:8px;align-items:center}
-.tag{color:var(--gold);font-size:12px}
-.progress{height:9px;background:#101810;border-radius:20px;overflow:hidden;margin:10px 0}
-.progress div{height:100%;background:var(--green)}
-nav{
+.panel h2{font-size:19px;margin:0 0 12px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.stat{background:#3b2a1c;padding:11px;border-radius:10px}
+.stat small{color:#c9ad88;display:block;margin-bottom:5px}
+.stat b{font-size:17px}
+.tabs{
  position:fixed;bottom:0;left:0;right:0;
- background:#18231b;border-top:1px solid var(--border);
+ background:#211810;border-top:1px solid #624326;
  display:grid;grid-template-columns:repeat(5,1fr);
- padding:8px 3px;z-index:10
+ padding:7px 2px calc(7px + env(safe-area-inset-bottom));
+ z-index:10;
 }
-nav button{
- background:transparent;border:0;padding:7px 2px;
- font-size:11px;color:var(--muted)
+.tab{
+ border:0;background:transparent;color:#c9ad88;
+ font-size:11px;padding:6px 1px;
 }
-nav button.active{color:var(--gold)}
-nav span{display:block;font-size:20px;margin-bottom:3px}
-.notice{color:var(--green);font-size:13px;min-height:20px}
+.tab span{display:block;font-size:21px;margin-bottom:3px}
+.tab.active{color:#ffd36a}
+.action{
+ background:#a96527;color:white;border:0;
+ border-radius:9px;padding:10px 13px;font-weight:bold;
+}
+.action:disabled{opacity:.4}
+.secondary{
+ background:#493522;color:#f5e6c8;
+ border:1px solid #765331;border-radius:9px;
+ padding:9px 12px;
+}
+.item{
+ background:#3b2a1c;border-radius:11px;
+ padding:12px;margin:8px 0;
+ display:flex;justify-content:space-between;
+ align-items:center;gap:8px;
+}
+.item small{display:block;color:#c9ad88;margin-top:4px}
+.tag{color:#ffd36a;font-size:12px}
+.progress{height:7px;background:#17120e;border-radius:10px;overflow:hidden;margin-top:8px}
+.progress div{height:100%;background:#d89b3e}
+.hidden{display:none!important}
+.muted{color:#bba68b;font-size:13px}
 </style>
 </head>
 <body>
 
-<header>
-<h1>⛏️ Шахтёрская Империя</h1>
-<small>Путь от новичка до легендарного шахтёра</small>
-</header>
-
-<div class="stats">
- <div class="stat">🪙 Монеты<b id="coins">500</b></div>
- <div class="stat">⚒️ Железо<b id="iron">0</b></div>
- <div class="stat">💎 Кристаллы<b id="crystals">0</b></div>
+<div id="loading">
+ <div class="logo">⛏️ ШАХТЁРСКАЯ<br>ИМПЕРИЯ</div>
+ <p>Подготавливаем шахты...</p>
+ <div class="loadingbar"><div class="loadingfill"></div></div>
 </div>
 
-<main>
+<div id="app">
+ <div class="header">
+  <div class="brand">⛏️ Шахтёрская Империя</div>
+  <div class="money">🪙 <span id="coins">0</span></div>
+ </div>
 
-<section id="mine" class="page active">
-<h2>⛏️ Шахта</h2>
-<div class="card">
- <h3 id="regionName">Каменные глубины</h3>
- <p id="regionInfo">Первая шахта твоей империи. Здесь можно добывать железо и монеты.</p>
- <div class="progress"><div id="mineProgress" style="width:0%"></div></div>
- <button class="gold action" onclick="mine()">⛏️ Начать добычу</button>
- <p class="notice" id="mineMessage"></p>
+ <div id="content"></div>
 </div>
-<h3>🌍 Регионы</h3>
-<div id="regions" class="grid"></div>
-</section>
 
-<section id="miners" class="page">
-<h2>👷 Мои шахтёры</h2>
-<div class="card">
- <h3>Твоя команда</h3>
- <p>Шахтёры получают опыт и становятся сильнее.</p>
- <button onclick="hireMiner()" class="gold action">Нанять шахтёра — 150 🪙</button>
- <p class="notice" id="minerMessage"></p>
-</div>
-<div id="minerList"></div>
-</section>
-
-<section id="city" class="page">
-<h2>🏘️ Город</h2>
-<p>Покупай здания и развивай свою империю. Карты города здесь нет — только улучшения и бонусы.</p>
-<div id="buildings"></div>
-</section>
-
-<section id="expeditions" class="page">
-<h2>🧭 Экспедиции</h2>
-<div class="card">
- <h3>Поход за сокровищами</h3>
- <p>Отправляй команду искать редкие ресурсы.</p>
- <button class="gold action" onclick="expedition()">Отправиться — 50 🪙</button>
- <p id="expMessage" class="notice"></p>
-</div>
-</section>
-
-<section id="chests" class="page">
-<h2>🎁 Сундуки</h2>
-<div class="card item">
- <h3>📦 Шахтёрский сундук</h3>
- <p>Монеты и железо.</p>
- <button onclick="openChest('miner')">Открыть бесплатно</button>
-</div>
-<div class="card item">
- <h3>💎 Сундук геолога</h3>
- <p>Кристаллы и редкие материалы.</p>
- <button onclick="openChest('geo')">Открыть бесплатно</button>
-</div>
-<p class="notice" id="chestMessage"></p>
-</section>
-
-<section id="market" class="page">
-<h2>🛒 Ярмарка шахтёров</h2>
-<p>Пока доступна торговля с игровым магазином. Обмен между реальными игроками добавим после подключения сервера.</p>
-<div class="card item">
- <h3>Продать железо</h3>
- <p>Цена: 10 монет за штуку.</p>
- <button onclick="sellIron()">Продать 1 железо</button>
-</div>
-<div class="card item">
- <h3>Продать кристалл</h3>
- <p>Цена: 50 монет за штуку.</p>
- <button onclick="sellCrystal()">Продать 1 кристалл</button>
-</div>
-<p id="marketMessage" class="notice"></p>
-</section>
-
-<section id="guild" class="page">
-<h2>🛡️ Гильдия</h2>
-<div class="card">
- <h3>Твоя гильдия</h3>
- <p>Создай собственную гильдию. Пока это одиночный игровой раздел.</p>
- <button onclick="createGuild()">Создать гильдию — 300 🪙</button>
- <p id="guildMessage" class="notice"></p>
-</div>
-</section>
-
-<section id="rating" class="page">
-<h2>🏆 Рейтинг</h2>
-<div class="card">
- <h3>Твоё место</h3>
- <p>Личный рейтинг рассчитывается по уровню и развитию команды.</p>
- <h2 id="ratingScore">0 очков</h2>
-</div>
-</section>
-
-<section id="profile" class="page">
-<h2>👤 Профиль</h2>
-<div class="card">
- <h3>Владелец империи</h3>
- <p>Уровень игрока: <b id="playerLevel">1</b></p>
- <p>Опыт: <b id="playerXP">0</b></p>
- <p>Шахтёров: <b id="minerCount">0</b></p>
- <p>Построек: <b id="buildingCount">0</b></p>
- <button class="action" onclick="saveGame()">💾 Сохранить игру</button>
- <button class="action" onclick="resetGame()">Начать заново</button>
- <p class="notice" id="saveMessage"></p>
-</div>
-</section>
-
-</main>
-
-<nav>
-<button class="active" onclick="showPage('mine',this)"><span>⛏️</span>Шахта</button>
-<button onclick="showPage('miners',this)"><span>👷</span>Шахтёры</button>
-<button onclick="showPage('city',this)"><span>🏘️</span>Город</button>
-<button onclick="showPage('expeditions',this)"><span>🧭</span>Походы</button>
-<button onclick="showPage('profile',this)"><span>👤</span>Профиль</button>
+<nav class="tabs">
+ <button class="tab active" data-tab="mine"><span>⛏️</span>Шахта</button>
+ <button class="tab" data-tab="miners"><span>👷</span>Шахтёры</button>
+ <button class="tab" data-tab="city"><span>🏛️</span>Город</button>
+ <button class="tab" data-tab="shop"><span>🛒</span>Магазин</button>
+ <button class="tab" data-tab="profile"><span>👤</span>Профиль</button>
 </nav>
 
 <script>
-const regions=[
- {name:"Каменные глубины",cost:0,info:"Начальный регион. Железо и монеты."},
- {name:"Огненные пещеры",cost:500,info:"Жаркие пещеры с ценными минералами."},
- {name:"Кристальный лес",cost:1200,info:"Место, где встречаются редкие кристаллы."},
- {name:"Затонувший город",cost:2500,info:"Затерянные сокровища древнего мира."},
- {name:"Бездна",cost:5000,info:"Опасные глубины с богатыми залежами."},
- {name:"Ядро мира",cost:10000,info:"Самый редкий и ценный регион."}
-];
-
-const buildingData=[
- {name:"Кузница",cost:300,bonus:"+5% к добыче"},
- {name:"Библиотека",cost:400,bonus:"+5% к опыту"},
- {name:"Рынок",cost:500,bonus:"−2% комиссии торговли"},
- {name:"Вокзал",cost:600,bonus:"+5% к экспедициям"},
- {name:"Казначейство",cost:700,bonus:"+3% к монетам"},
- {name:"Лаборатория",cost:800,bonus:"+5% к поиску минералов"}
-];
-
-let game={
- coins:500,iron:0,crystals:0,xp:0,level:1,
- region:0,unlocked:[0],miners:[],buildings:{},
- lastChest:{},guild:false
+const RESOURCES = {
+ iron:{name:"Железная руда",icon:"🪨"},
+ copper:{name:"Медная руда",icon:"🟠"},
+ gold:{name:"Золотая руда",icon:"🟡"},
+ silver:{name:"Серебряная руда",icon:"⚪"},
+ amethyst:{name:"Аметист",icon:"💜"},
+ emerald:{name:"Изумруд",icon:"💚"}
 };
 
-function loadGame(){
- try{
-  const data=JSON.parse(localStorage.getItem("shakhtyorGame"));
-  if(data) game={...game,...data};
- }catch(e){}
+const REGIONS = [
+ "Уральские горы",
+ "Сибирские рудники",
+ "Алтайские месторождения",
+ "Карельские глубины",
+ "Якутские копи",
+ "Заполярные шахты"
+];
+
+const PROFESSIONS = [
+ {name:"Рудокоп",bonus:"Железная руда",type:"iron"},
+ {name:"Геолог",bonus:"Редкие минералы",type:"rare"},
+ {name:"Золотодобытчик",bonus:"Золото",type:"gold"},
+ {name:"Инженер",bonus:"Общая добыча",type:"all"},
+ {name:"Исследователь",bonus:"Новые месторождения",type:"explore"},
+ {name:"Кузнец",bonus:"Экипировка",type:"craft"}
+];
+
+const RARITIES = [
+ {name:"Обычный",chance:60,mult:1},
+ {name:"Необычный",chance:25,mult:1.2},
+ {name:"Редкий",chance:10,mult:1.5},
+ {name:"Эпический",chance:4,mult:2},
+ {name:"Легендарный",chance:1,mult:3}
+];
+
+const BUILDINGS = [
+ {id:"forge",name:"Кузница",icon:"⚒️",desc:"+5% добычи за уровень",bonus:0.05},
+ {id:"library",name:"Библиотека",icon:"📚",desc:"+5% опыта за уровень",bonus:0.05},
+ {id:"treasury",name:"Казначейство",icon:"🏦",desc:"+3% монет за уровень",bonus:0.03},
+ {id:"lab",name:"Лаборатория",icon:"🧪",desc:"+5% редких находок за уровень",bonus:0.05},
+ {id:"market",name:"Рынок",icon:"🏪",desc:"Снижение комиссии торговли",bonus:0.02},
+ {id:"station",name:"Вокзал",icon:"🚂",desc:"+5% наград экспедиций",bonus:0.05}
+];
+
+function newGame(){
+ return {
+  coins:500,
+  level:1,
+  xp:0,
+  region:0,
+  miners:[],
+  ore:{iron:0,copper:0,gold:0,silver:0,amethyst:0,emerald:0},
+  buildings:{forge:0,library:0,treasury:0,lab:0,market:0,station:0},
+  lastTime:Date.now(),
+  totalMined:0
+ };
 }
-function saveGame(){
- localStorage.setItem("shakhtyorGame",JSON.stringify(game));
- document.getElementById("saveMessage").textContent="Прогресс сохранён!";
- update();
+
+let game;
+try{
+ game=JSON.parse(localStorage.getItem("minerEmpireSave"))||newGame();
+}catch(e){game=newGame()}
+
+let currentTab="mine";
+
+function save(){
+ game.lastTime=Date.now();
+ localStorage.setItem("minerEmpireSave",JSON.stringify(game));
 }
-function update(){
- coins.textContent=game.coins;
- iron.textContent=game.iron;
- crystals.textContent=game.crystals;
- playerLevel.textContent=game.level;
- playerXP.textContent=game.xp;
- minerCount.textContent=game.miners.length;
- buildingCount.textContent=Object.values(game.buildings).reduce((a,b)=>a+b,0);
- ratingScore.textContent=(game.level*100+game.miners.length*50)+" очков";
- renderRegions();renderMiners();renderBuildings();
- localStorage.setItem("shakhtyorGame",JSON.stringify(game));
+
+function levelRate(level){
+ if(level>=100)return 75;
+ if(level>=80)return 50;
+ if(level>=60)return 35;
+ if(level>=40)return 20;
+ if(level>=20)return 10;
+ if(level>=10)return 5;
+ if(level>=5)return 3;
+ return 1;
 }
-function showPage(id,btn){
- document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
- document.getElementById(id).classList.add("active");
- document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
- if(btn)btn.classList.add("active");
+
+function minerRate(miner){
+ let rate=levelRate(miner.level)*miner.mult;
+ if(miner.profession==="Рудокоп")rate*=1.15;
+ if(miner.profession==="Золотодобытчик")rate*=1.1;
+ if(miner.profession==="Инженер")rate*=1.1;
+ rate*=1+game.buildings.forge*0.05;
+ return rate;
 }
-function addXP(n){
- game.xp+=n;
+
+function totalRate(){
+ return game.miners.reduce((sum,m)=>sum+minerRate(m),0);
+}
+
+function addOre(seconds){
+ const amount=totalRate()*seconds/60;
+ if(amount<=0)return;
+ game.ore.iron+=amount;
+ game.totalMined+=amount;
+}
+
+function calculateOffline(){
+ const now=Date.now();
+ const elapsed=Math.max(0,Math.min(now-game.lastTime,24*60*60*1000));
+ addOre(elapsed/1000);
+ game.lastTime=now;
+}
+
+function gainXP(amount){
+ game.xp+=amount;
  while(game.xp>=game.level*100){
   game.xp-=game.level*100;
   game.level++;
-  game.coins+=100;
  }
 }
-function mine(){
- let bonus=1+(game.buildings["Кузница"]||0)*.05;
- let ironGain=Math.max(1,Math.floor(3*bonus));
- let coinGain=Math.floor(8*(1+(game.buildings["Казначейство"]||0)*.03));
- game.iron+=ironGain;
- game.coins+=coinGain;
- if(Math.random()<.15+(game.buildings["Лаборатория"]||0)*.01)game.crystals++;
- addXP(10);
- mineMessage.textContent="Добыто: "+ironGain+" железа и "+coinGain+" монет!";
- saveGame();
+
+function render(){
+ document.getElementById("coins").textContent=Math.floor(game.coins).toLocaleString("ru-RU");
+ const root=document.getElementById("content");
+ root.innerHTML="";
+ if(currentTab==="mine")renderMine(root);
+ if(currentTab==="miners")renderMiners(root);
+ if(currentTab==="city")renderCity(root);
+ if(currentTab==="shop")renderShop(root);
+ if(currentTab==="profile")renderProfile(root);
 }
-function renderRegions(){
- regions.innerHTML=regionsList();
+
+function renderMine(root){
+ root.innerHTML=`
+ <section class="panel">
+  <h2>⛏️ Главная шахта</h2>
+  <p class="muted">Твои шахтёры работают и добывают руду автоматически.</p>
+  <div class="stats">
+   <div class="stat"><small>Добыча в минуту</small><b>${totalRate().toFixed(1)}</b></div>
+   <div class="stat"><small>Уровень империи</small><b>${game.level}</b></div>
+   <div class="stat"><small>Всего добыто</small><b>${Math.floor(game.totalMined)}</b></div>
+   <div class="stat"><small>Регион</small><b>${REGIONS[game.region]}</b></div>
+  </div>
+ </section>
+ <section class="panel">
+  <h2>📦 Склад ресурсов</h2>
+  ${Object.entries(RESOURCES).map(([id,r])=>`
+   <div class="item"><div>${r.icon} ${r.name}</div><b>${Math.floor(game.ore[id])}</b></div>
+  `).join("")}
+ </section>
+ <section class="panel">
+  <h2>🗺️ Месторождения России</h2>
+  <div class="item">
+   <div>📍 ${REGIONS[game.region]}<small>Текущий регион добычи</small></div>
+   <span class="tag">Открыт</span>
+  </div>
+  ${REGIONS.map((r,i)=>`
+   <div class="item">
+    <div>📍 ${r}<small>${i===game.region?"Текущий регион":i<game.region?"Пройден":"Пока закрыт"}</small></div>
+    <span>${i<=game.region?"✅":"🔒"}</span>
+   </div>
+  `).join("")}
+ </section>`;
 }
-function regionsList(){
- return regions.map((r,i)=>{
- let unlocked=game.unlocked.includes(i);
- return `<div class="card item">
- <h3>${r.name}</h3><p>${r.info}</p>
- ${unlocked?
- `<button onclick="selectRegion(${i})">${game.region===i?"Выбран":"Выбрать"}</button>`:
- `<button onclick="unlockRegion(${i})">Открыть — ${r.cost} 🪙</button>`}
- </div>`;
- }).join("");
+
+function renderMiners(root){
+ root.innerHTML=`
+ <section class="panel">
+  <h2>👷 Мои шахтёры</h2>
+  <p class="muted">Уровень и специализация влияют на скорость добычи.</p>
+  <button class="action" onclick="hireMiner()">Нанять шахтёра — 100 🪙</button>
+  <div style="margin-top:12px">
+  ${game.miners.length?game.miners.map((m,i)=>`
+   <div class="item">
+    <div>
+     <b>${m.rarity} ${m.name}</b>
+     <small>${m.profession} · Уровень ${m.level}</small>
+     <small>Добыча: ${minerRate(m).toFixed(1)} руды/мин</small>
+    </div>
+    <button class="secondary" onclick="upgradeMiner(${i})">Улучшить</button>
+   </div>
+  `).join(""):"<p class='muted'>Пока шахтёров нет. Нажми «Нанять шахтёра».</p>"}
+  </div>
+ </section>`;
 }
-function selectRegion(i){
- if(!game.unlocked.includes(i))return;
- game.region=i;
- regionName.textContent=regions[i].name;
- regionInfo.textContent=regions[i].info;
- update();
+
+function randomRarity(){
+ const n=Math.random()*100;
+ let total=0;
+ for(const r of RARITIES){
+  total+=r.chance;
+  if(n<=total)return r;
+ }
+ return RARITIES[0];
 }
-function unlockRegion(i){
- if(game.coins<regions[i].cost)return alert("Недостаточно монет!");
- game.coins-=regions[i].cost;
- game.unlocked.push(i);
- selectRegion(i);
-}
+
 function hireMiner(){
- if(game.coins<150){minerMessage.textContent="Не хватает монет.";return}
- game.coins-=150;
- const rar=Math.random();
- let rarity=rar<.01?"Легендарный":rar<.05?"Эпический":rar<.15?"Редкий":rar<.4?"Необычный":"Обычный";
- const names=["Иван","Мирослав","Борис","Фёдор","Егор","Алексей","Добрыня","Степан"];
- game.miners.push({name:names[Math.floor(Math.random()*names.length)],rarity:rarity,level:1,xp:0});
- minerMessage.textContent="Новый шахтёр нанят!";
- addXP(15);update();
+ if(game.coins<100)return alert("Недостаточно монет!");
+ game.coins-=100;
+ const rarity=randomRarity();
+ const profession=PROFESSIONS[Math.floor(Math.random()*PROFESSIONS.length)];
+ game.miners.push({
+  name:"Шахтёр",
+  rarity:rarity.name,
+  mult:rarity.mult,
+  profession:profession.name,
+  level:1
+ });
+ save();render();
 }
-function renderMiners(){
- minerList.innerHTML=game.miners.length?game.miners.map((m,i)=>`
- <div class="card item">
- <div class="row"><h3>👷 ${m.name}</h3><span class="tag">${m.rarity}</span></div>
- <p>Уровень: ${m.level} · Опыт: ${m.xp}/100</p>
- <button onclick="trainMiner(${i})">Тренировать — 30 🪙</button>
- </div>`).join(""):"<p>У тебя пока нет шахтёров. Найми первого!</p>";
+
+function upgradeMiner(i){
+ const m=game.miners[i];
+ const cost=m.level*100;
+ if(game.coins<cost)return alert("Недостаточно монет!");
+ game.coins-=cost;
+ m.level++;
+ save();render();
 }
-function trainMiner(i){
- let m=game.miners[i];
- if(game.coins<30)return alert("Не хватает монет!");
- game.coins-=30;m.xp+=25;
- if(m.xp>=100){m.xp-=100;m.level++}
- addXP(5);update();
+
+function renderCity(root){
+ root.innerHTML=`
+ <section class="panel">
+  <h2>🏛️ Город шахтёров</h2>
+  <p class="muted">Развивай город и получай постоянные бонусы. Это меню зданий, а не отдельная карта.</p>
+  ${BUILDINGS.map(b=>{
+   const lvl=game.buildings[b.id];
+   const cost=200+lvl*250;
+   return `<div class="item">
+    <div>
+     <b>${b.icon} ${b.name}</b>
+     <small>${b.desc}</small>
+     <small>Уровень: ${lvl}/10</small>
+    </div>
+    <button class="secondary" onclick="upgradeBuilding('${b.id}',${cost})">${lvl>=10?"Макс.":cost+" 🪙"}</button>
+   </div>`;
+  }).join("")}
+ </section>`;
 }
-function renderBuildings(){
- buildings.innerHTML=buildingData.map(b=>{
- let level=game.buildings[b.name]||0;
- let cost=Math.floor(b.cost*Math.pow(1.65,level));
- return `<div class="card item">
- <div class="row"><h3>🏠 ${b.name}</h3><span class="tag">Ур. ${level}/10</span></div>
- <p>${b.bonus}</p>
- <div class="progress"><div style="width:${level*10}%"></div></div>
- <button ${level>=10?"disabled":""} onclick="buyBuilding('${b.name}',${cost})">
- ${level===0?"Построить":"Улучшить"} — ${cost} 🪙
- </button></div>`;
- }).join("");
+
+function upgradeBuilding(id,cost){
+ if(game.buildings[id]>=10)return;
+ if(game.coins<cost)return alert("Недостаточно монет!");
+ game.coins-=cost;
+ game.buildings[id]++;
+ save();render();
 }
-function buyBuilding(name,cost){
- let level=game.buildings[name]||0;
- if(level>=10)return;
- if(game.coins<cost)return alert("Не хватает монет!");
- game.coins-=cost;game.buildings[name]=level+1;
- addXP(10);update();
+
+function renderShop(root){
+ root.innerHTML=`
+ <section class="panel">
+  <h2>🛒 Магазин</h2>
+  <p class="muted">Покупай полезные товары за игровые монеты.</p>
+  <div class="item"><div>⛏️ Улучшенная кирка<small>Бонус к добыче шахтёров</small></div><button class="secondary" onclick="buyItem('pickaxe')">300 🪙</button></div>
+  <div class="item"><div>📖 Учебник шахтёра<small>Опыт империи</small></div><button class="secondary" onclick="buyItem('book')">150 🪙</button></div>
+  <div class="item"><div>🎁 Сундук новичка<small>Случайная награда</small></div><button class="secondary" onclick="buyItem('chest')">250 🪙</button></div>
+ </section>`;
 }
-function expedition(){
- if(game.coins<50){expMessage.textContent="Не хватает монет.";return}
- game.coins-=50;
- let reward=Math.floor(Math.random()*5)+3;
- game.iron+=reward;
- if(Math.random()<.3)game.crystals++;
- addXP(20);
- expMessage.textContent="Экспедиция завершена! Найдено железо: "+reward;
- update();
-}
-function openChest(type){
- const key=type;
- const now=new Date().toDateString();
- if(game.lastChest[key]===now){
-  chestMessage.textContent="Этот сундук уже открывали сегодня.";
-  return;
+
+function buyItem(type){
+ if(type==="pickaxe"){
+  if(game.coins<300)return alert("Недостаточно монет!");
+  game.coins-=300;
+  game.miners.forEach(m=>m.mult*=1.1);
  }
- game.lastChest[key]=now;
- if(type==="miner"){
-  game.coins+=100;game.iron+=5;
-  chestMessage.textContent="Получено 100 монет и 5 железа!";
- }else{
-  game.crystals+=2;game.iron+=10;
-  chestMessage.textContent="Получено 2 кристалла и 10 железа!";
+ if(type==="book"){
+  if(game.coins<150)return alert("Недостаточно монет!");
+  game.coins-=150;
+  gainXP(50);
  }
- addXP(10);update();
+ if(type==="chest"){
+  if(game.coins<250)return alert("Недостаточно монет!");
+  game.coins-=250;
+  const reward=100+Math.floor(Math.random()*401);
+  game.coins+=reward;
+  alert("В сундуке оказалось "+reward+" монет!");
+ }
+ save();render();
 }
-function sellIron(){
- if(game.iron<1){marketMessage.textContent="Нет железа для продажи.";return}
- game.iron--;game.coins+=10;
- marketMessage.textContent="Продано 1 железо.";
- update();
+
+function renderProfile(root){
+ root.innerHTML=`
+ <section class="panel">
+  <h2>👤 Профиль</h2>
+  <div class="stats">
+   <div class="stat"><small>Уровень</small><b>${game.level}</b></div>
+   <div class="stat"><small>Опыт</small><b>${game.xp}/${game.level*100}</b></div>
+   <div class="stat"><small>Шахтёров</small><b>${game.miners.length}</b></div>
+   <div class="stat"><small>Монеты</small><b>${Math.floor(game.coins)}</b></div>
+  </div>
+  <div class="progress"><div style="width:${game.xp/(game.level*100)*100}%"></div></div>
+  <p class="muted">Прогресс сохраняется автоматически на этом устройстве.</p>
+ </section>
+ <section class="panel">
+  <h2>⚙️ Сохранение</h2>
+  <button class="secondary" onclick="save();alert('Прогресс сохранён!')">Сохранить сейчас</button>
+  <button class="secondary" onclick="if(confirm('Сбросить весь прогресс?')){localStorage.removeItem('minerEmpireSave');location.reload()}">Начать заново</button>
+ </section>`;
 }
-function sellCrystal(){
- if(game.crystals<1){marketMessage.textContent="Нет кристаллов.";return}
- game.crystals--;game.coins+=50;
- marketMessage.textContent="Продан 1 кристалл.";
- update();
-}
-function createGuild(){
- if(game.guild){guildMessage.textContent="У тебя уже есть гильдия.";return}
- if(game.coins<300){guildMessage.textContent="Нужно 300 монет.";return}
- game.coins-=300;game.guild=true;
- guildMessage.textContent="Гильдия создана!";
- update();
-}
-function resetGame(){
- if(!confirm("Точно начать игру заново?"))return;
- localStorage.removeItem("shakhtyorGame");
- location.reload();
-}
-loadGame();
-selectRegion(game.region);
-update();
+
+document.querySelectorAll(".tab").forEach(btn=>{
+ btn.addEventListener("click",()=>{
+  currentTab=btn.dataset.tab;
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b===btn));
+  render();
+ });
+});
+
+calculateOffline();
+render();
+setInterval(()=>{
+ addOre(1);
+ gainXP(1);
+ save();
+ if(currentTab==="mine"||currentTab==="profile")render();
+},1000);
+
+setInterval(save,10000);
+
+setTimeout(()=>{
+ document.getElementById("loading").style.display="none";
+ document.getElementById("app").style.display="block";
+},2100);
 </script>
 </body>
 </html>
+
