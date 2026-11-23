@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#17130f">
+<title>Шахтёрская Империя</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#17130f;--panel:#292017;--panel2:#382a1d;--gold:#e7b65d;--text:#f6ead6;--muted:#bca98e;--green:#8ab879}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#49331e 0,#211910 40%,var(--bg) 78%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,sans-serif;padding:14px 14px 92px}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:4px 0 14px}
+h1{font-size:21px;margin:0;color:var(--gold)}.sub{font-size:12px;color:var(--muted)}
+.wallet{background:#352719;border:1px solid #72512c;border-radius:14px;padding:8px 11px;font-weight:700;white-space:nowrap}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stat,.panel{background:linear-gradient(145deg,#38291d,#241b14);border:1px solid #624629;border-radius:16px;padding:12px}
+.stat small{display:block;color:var(--muted);font-size:11px}.stat b{font-size:17px;color:var(--gold)}
+h2{font-size:17px;margin:0 0 10px}.panel{margin:10px 0}
+.mine{min-height:170px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#4a321e,#251b13)}
+.mine-icon{font-size:62px;filter:drop-shadow(0 5px 4px #0008)}.mine p{margin:3px 0 10px;color:var(--muted);font-size:13px}
+button{border:0;border-radius:12px;padding:11px 14px;background:linear-gradient(#e9bd69,#b77b32);color:#28190b;font-weight:800;font-size:14px}
+button:disabled{opacity:.45} .secondary{background:#57412b;color:var(--text);border:1px solid #8a663b}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.item{background:#2b2118;border:1px solid #58402a;border-radius:13px;padding:10px}.item b{display:block}.item small{display:block;color:var(--muted);margin:4px 0 8px;font-size:12px}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#1c1712ee;backdrop-filter:blur(10px);border-top:1px solid #60472d;display:grid;grid-template-columns:repeat(4,1fr);padding:8px 5px calc(8px + env(safe-area-inset-bottom));gap:4px}
+.nav button{background:transparent;color:var(--muted);padding:7px 2px;font-size:11px;border-radius:10px}.nav button.active{background:#49331e;color:var(--gold)}
+.view{display:none}.view.active{display:block}.notice{color:var(--muted);font-size:12px;line-height:1.4}
+.progress{height:8px;background:#17120e;border-radius:9px;overflow:hidden;margin:8px 0}.progress span{display:block;height:100%;background:linear-gradient(90deg,#a96b2d,#f0c66d);width:0}
+</style>
+</head>
+<body>
+<header><div><h1>⛏ Шахтёрская Империя</h1><div class="sub">Собери богатства под землёй</div></div><div class="wallet">🪙 <span id="coins">0</span></div></header>
+<div class="stats">
+ <div class="stat"><small>⛏ Железо</small><b id="iron">0</b></div>
+ <div class="stat"><small>🟠 Медь</small><b id="copper">0</b></div>
+ <div class="stat"><small>⭐ Уровень</small><b id="level">1</b></div>
+</div>
+<main>
+<section id="mineView" class="view active">
+ <div class="panel mine"><div class="mine-icon">🪨</div><h2>Каменные глубины</h2><p>Нажимай, чтобы добывать руду и получать опыт</p><button id="mineBtn">⛏ Добывать</button></div>
+ <div class="panel"><h2>Опыт шахтёра</h2><div class="progress"><span id="xpBar"></span></div><div class="notice"><span id="xp">0</span> / <span id="xpNeed">100</span> опыта до следующего уровня</div></div>
+</section>
+<section id="minersView" class="view">
+ <div class="panel"><h2>👷 Шахтёры</h2><p>Твоя команда пока небольшая. Нанимай работников за монеты.</p><div class="item"><b>Рудокоп — уровень <span id="minerLevel">1</span></b><small>Помогает получать больше руды.</small><button id="hireBtn">Нанять улучшение · 50 🪙</button></div></div>
+</section>
+<section id="cityView" class="view">
+ <div class="panel"><h2>🏘 Город</h2><p class="notice">Покупай здания. Это список улучшений, не отдельная карта.</p><div id="buildings" class="grid"></div></div>
+</section>
+<section id="moreView" class="view">
+ <div class="panel"><h2>🎒 Склад</h2><p>Железо: <b id="iron2">0</b></p><p>Медь: <b id="copper2">0</b></p><p class="notice">Экспедиции, ярмарка, сундуки, гильдии и рейтинг появятся в следующих обновлениях.</p></div>
+ <div class="panel"><h2>👤 Профиль</h2><p>Уровень: <b id="level2">1</b></p><p>Всего добыто: <b id="total">0</b></p></div>
+</section>
+</main>
+<nav class="nav">
+ <button class="active" data-view="mineView">⛏<br>Шахта</button>
+ <button data-view="minersView">👷<br>Шахтёры</button>
+ <button data-view="cityView">🏘<br>Город</button>
+ <button data-view="moreView">🎒<br>Ещё</button>
+</nav>
+<script>
+const defaults={coins:0,iron:0,copper:0,level:1,xp:0,total:0,minerLevel:1,buildings:{}};
+let game={...defaults,...JSON.parse(localStorage.getItem('minerEmpireSave')||'{}')};
+const buildingList=[
+ {id:'forge',name:'⚒ Кузница',desc:'+5% к добыче за уровень',cost:100},
+ {id:'library',name:'📚 Библиотека',desc:'+5% к получаемому опыту',cost:120},
+ {id:'market',name:'🛒 Рынок',desc:'В будущем снизит комиссию торговли',cost:150},
+ {id:'station',name:'🚂 Вокзал',desc:'В будущем ускорит экспедиции',cost:180}
+];
+function save(){localStorage.setItem('minerEmpireSave',JSON.stringify(game));render()}
+function render(){
+ ['coins','iron','copper','level','xp','minerLevel','total'].forEach(k=>{let e=document.getElementById(k);if(e)e.textContent=game[k]});
+ document.getElementById('iron2').textContent=game.iron;document.getElementById('copper2').textContent=game.copper;document.getElementById('level2').textContent=game.level;
+ let need=game.level*100;document.getElementById('xpNeed').textContent=need;document.getElementById('xpBar').style.width=Math.min(100,game.xp/need*100)+'%';
+ document.getElementById('buildings').innerHTML=buildingList.map(b=>{let lvl=game.buildings[b.id]||0,cost=b.cost*(lvl+1);return `<div class="item"><b>${b.name}</b><small>${b.desc}<br>Уровень: ${lvl}/10</small><button class="secondary" onclick="buyBuilding('${b.id}')" ${lvl>=10||game.coins<cost?'disabled':''}>${lvl>=10?'Максимум':'Улучшить · '+cost+' 🪙'}</button></div>`}).join('');
+}
+function addXp(n){game.xp+=n;while(game.xp>=game.level*100){game.xp-=game.level*100;game.level++}}
+document.getElementById('mineBtn').onclick=()=>{let bonus=1+(game.buildings.forge||0)*.05;let ore=Math.floor(bonus);game.iron+=ore;game.copper+=Math.random()<.25?1:0;game.coins+=5;game.total+=ore;addXp(Math.floor(5*(1+(game.buildings.library||0)*.05)));save()};
+document.getElementById('hireBtn').onclick=()=>{let cost=50*game.minerLevel;if(game.coins>=cost){game.coins-=cost;game.minerLevel++;save()}};
+function buyBuilding(id){let b=buildingList.find(x=>x.id===id),lvl=game.buildings[id]||0,cost=b.cost*(lvl+1);if(lvl<10&&game.coins>=cost){game.coins-=cost;game.buildings[id]=lvl+1;save()}}
+document.querySelectorAll('.nav button').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.getElementById(btn.dataset.view).classList.add('active')});
+if(window.Telegram?.WebApp){Telegram.WebApp.ready();Telegram.WebApp.expand()}
+render();
+</script>
+</body>
+</html>
