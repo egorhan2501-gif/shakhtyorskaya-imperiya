@@ -5,32 +5,33 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#090807">
-<title>Шахтёрская Империя 7.0</title>
+<title>Шахтёрская Империя 7.0.1</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 :root{
- --bg:#090807;--panel:#17130f;--panel2:#211a12;--gold:#d6a84d;
- --gold2:#f0cf80;--bronze:#89602c;--text:#f0e5d0;
- --muted:#a99b84;--green:#78b879;--red:#d36e5c;
+ --bg:#090807;--panel:#17130f;--panel2:#211a12;
+ --gold:#d6a84d;--gold2:#f0cf80;--bronze:#89602c;
+ --text:#f0e5d0;--muted:#a99b84;
 }
 *{box-sizing:border-box}
 body{
  margin:0;background:var(--bg);color:var(--text);
- font-family:Georgia,"Times New Roman",serif;
+ font-family:Georgia,"Times New Roman",serif;min-height:100vh;
  background-image:radial-gradient(ellipse at 50% -20%,#3b2b16 0%,transparent 55%);
- min-height:100vh;
 }
 button,select{font:inherit}
 button{
- border:1px solid var(--bronze);background:linear-gradient(145deg,#3a2a16,#21170d);
+ border:1px solid var(--bronze);
+ background:linear-gradient(145deg,#3a2a16,#21170d);
  color:var(--gold2);padding:11px 13px;border-radius:10px;
  cursor:pointer;font-weight:bold;
 }
 button:disabled{opacity:.4;cursor:not-allowed}
 button:active{transform:scale(.98)}
-input,select{
- background:#100e0b;color:var(--text);border:1px solid #634925;
- border-radius:8px;padding:9px;max-width:100%;
+select{
+ background:#100e0b;color:var(--text);
+ border:1px solid #634925;border-radius:8px;
+ padding:8px;margin:4px 4px 4px 0;max-width:100%;
 }
 #loading{
  position:fixed;inset:0;background:#080706;z-index:100;
@@ -49,9 +50,7 @@ input,select{
 .header-emblem{font-size:30px;color:var(--gold)}
 h1{font-size:23px;color:var(--gold2);margin:5px 0}
 .subtitle{font-size:11px;letter-spacing:2px;color:var(--muted)}
-.stats{
- display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0;
-}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0}
 .stat{background:var(--panel);border:1px solid #49351c;border-radius:10px;padding:10px;text-align:center}
 .stat small{display:block;color:var(--muted);font-size:11px}
 .stat strong{display:block;color:var(--gold2);font-size:16px;margin-top:4px}
@@ -60,10 +59,16 @@ h1{font-size:23px;color:var(--gold2);margin:5px 0}
  border:1px solid #49351c;border-radius:13px;padding:14px;margin-bottom:12px;
 }
 .panel h2{font-size:18px;color:var(--gold2);margin:0 0 12px}
-.panel h3{font-size:15px;color:var(--gold);margin:10px 0}
+.item{border:1px solid #49351c;background:#100e0b;border-radius:10px;padding:11px;margin:8px 0}
+.item-top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.item-title{color:var(--gold2);font-weight:bold}
+.item-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.item-actions button{font-size:12px;padding:8px}
 .muted{color:var(--muted);font-size:12px}
 .gold{color:var(--gold2)}
-.big-number{font-size:25px;color:var(--gold2)}
+.badge{font-size:10px;border:1px solid #755329;border-radius:20px;padding:3px 7px;white-space:nowrap}
+.common{color:#c4c4c4}.uncommon{color:#83c77b}.rare{color:#62a9ed}
+.epic{color:#bd80e8}.legendary{color:#f4bf51}
 .mine-scene{
  border:1px solid #755329;border-radius:13px;min-height:145px;
  display:flex;flex-direction:column;justify-content:center;align-items:center;
@@ -75,22 +80,11 @@ h1{font-size:23px;color:var(--gold2);margin:5px 0}
 .mine-desc{color:var(--muted);font-size:12px}
 .mine-btn{width:100%;padding:17px;font-size:17px;margin-bottom:9px}
 .resource-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
-.resource{
- background:#100e0b;border:1px solid #49351c;border-radius:9px;padding:9px;
- display:flex;justify-content:space-between;gap:5px;font-size:13px;
-}
-.item{
- border:1px solid #49351c;background:#100e0b;border-radius:10px;
- padding:11px;margin:8px 0;
-}
-.item-top{display:flex;justify-content:space-between;gap:8px;align-items:center}
-.item-title{color:var(--gold2);font-weight:bold}
-.item-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
-.item-actions button{font-size:12px;padding:8px}
-.common{color:#c4c4c4}.uncommon{color:#83c77b}.rare{color:#62a9ed}
-.epic{color:#bd80e8}.legendary{color:#f4bf51}
+.resource{background:#100e0b;border:1px solid #49351c;border-radius:9px;padding:9px;display:flex;justify-content:space-between;gap:5px;font-size:13px}
 .progress{height:7px;background:#30251a;border-radius:9px;overflow:hidden;margin:7px 0}
 .progress span{display:block;height:100%;background:linear-gradient(90deg,#986c2e,#f0ce7b)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.notice{background:#251b10;border-left:3px solid var(--gold);padding:9px;font-size:12px;margin:8px 0}
 .tabs{
  position:fixed;bottom:0;left:0;right:0;z-index:20;
  background:#0b0907;border-top:1px solid #634925;
@@ -101,14 +95,9 @@ h1{font-size:23px;color:var(--gold2);margin:5px 0}
 .toast{
  position:fixed;top:15px;left:50%;transform:translateX(-50%);
  z-index:200;background:#332514;border:1px solid var(--gold);
- padding:11px 17px;border-radius:10px;display:none;max-width:90%;
- text-align:center;
+ padding:11px 17px;border-radius:10px;display:none;max-width:90%;text-align:center;
 }
 hr{border:0;border-top:1px solid #49351c;margin:12px 0}
-.badge{font-size:10px;border:1px solid #755329;border-radius:20px;padding:3px 7px}
-.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.notice{background:#251b10;border-left:3px solid var(--gold);padding:9px;font-size:12px;margin:8px 0}
 @media(max-width:370px){
  .stats{grid-template-columns:repeat(2,1fr)}
  .tabs button{font-size:9px}
@@ -116,6 +105,7 @@ hr{border:0;border-top:1px solid #49351c;margin:12px 0}
 </style>
 </head>
 <body>
+
 <div id="loading">
  <div class="load-inner">
   <div class="eagle">⚜</div>
@@ -124,13 +114,16 @@ hr{border:0;border-top:1px solid #49351c;margin:12px 0}
   <div style="color:#a77a35;font-size:24px;margin-top:15px">⚒</div>
  </div>
 </div>
+
 <div class="toast" id="toast"></div>
+
 <div id="app">
  <header class="header">
   <div class="header-emblem">⚜</div>
   <h1>ШАХТЁРСКАЯ ИМПЕРИЯ</h1>
   <div class="subtitle">ВЕЛИКАЯ ГОРНОПРОМЫШЛЕННАЯ ДЕРЖАВА</div>
  </header>
+
  <div class="stats">
   <div class="stat"><small>Казна</small><strong id="money">0 ₽</strong></div>
   <div class="stat"><small>Опыт</small><strong id="xp">0</strong></div>
@@ -139,9 +132,11 @@ hr{border:0;border-top:1px solid #49351c;margin:12px 0}
   <div class="stat"><small>Репутация</small><strong id="rep">0</strong></div>
   <div class="stat"><small>Доход шахт</small><strong id="income">0/мин</strong></div>
  </div>
+
  <main id="content"></main>
 </div>
-<nav class="tabs" id="tabs">
+
+<nav class="tabs">
  <button data-tab="mine" class="active">⚒ Шахта</button>
  <button data-tab="miners">👷 Гильдия</button>
  <button data-tab="chests">🎁 Сундуки</button>
@@ -151,6 +146,7 @@ hr{border:0;border-top:1px solid #49351c;margin:12px 0}
 
 <script>
 "use strict";
+
 const $=id=>document.getElementById(id);
 const now=()=>Date.now();
 const fmt=n=>Math.floor(n||0).toLocaleString("ru-RU");
@@ -165,6 +161,7 @@ const ORES={
  emerald:{name:"Изумруд",icon:"💚",price:150},
  diamond:{name:"Алмаз",icon:"💎",price:300}
 };
+
 const MINES=[
  {name:"Уральские рудники",icon:"⛰️",desc:"Старые богатые железом рудники.",cost:0,level:1,ores:["iron","copper"],mult:1},
  {name:"Сибирские шахты",icon:"🌲",desc:"Суровые земли и залежи серебра.",cost:2500,level:3,ores:["iron","copper","silver"],mult:1.3},
@@ -173,6 +170,7 @@ const MINES=[
  {name:"Якутские прииски",icon:"❄️",desc:"Земля золота и драгоценных камней.",cost:100000,level:15,ores:["gold","amethyst","emerald","diamond"],mult:2.8},
  {name:"Заполярные глубины",icon:"🌌",desc:"Самые дальние и дорогие месторождения.",cost:350000,level:22,ores:["silver","gold","emerald","diamond"],mult:3.8}
 ];
+
 const WORKERS=[
  ["Горный рабочий","👷","common","Универсал",1],
  ["Рудокоп","⛏️","common","Железо",1.15],
@@ -194,7 +192,15 @@ const WORKERS=[
  ["Сибирский первопроходец","🐻","rare","Золото",1.9],
  ["Уральский мастер","🛠️","uncommon","Железо",1.5],
  ["Великий рудознатец","🌟","legendary","Редкие руды",3.2]
-].map((w,i)=>({id:i,name:w[0],icon:w[1],rarity:w[2],spec:w[3],power:w[4]}));
+].map((w,i)=>({
+ id:i,name:w[0],icon:w[1],rarity:w[2],spec:w[3],power:w[4]
+}));
+
+const RARITIES=["common","uncommon","rare","epic","legendary"];
+const RUS={
+ common:"Обычный",uncommon:"Необычный",rare:"Редкий",
+ epic:"Эпический",legendary:"Легендарный"
+};
 
 const CHESTS=[
  {id:"wood",name:"Рабочий ящик",icon:"📦",cost:500,desc:"Начальные работники",weights:[65,25,9,1,0]},
@@ -202,33 +208,34 @@ const CHESTS=[
  {id:"gold",name:"Золотой сундук",icon:"🎁",cost:10000,desc:"Редкие специалисты",weights:[10,25,35,23,7]},
  {id:"imperial",name:"Императорский сундук",icon:"👑",cost:40000,desc:"Шанс получить легенду",weights:[0,10,25,35,30]}
 ];
-const RARITIES=["common","uncommon","rare","epic","legendary"];
-const RUS={common:"Обычный",uncommon:"Необычный",rare:"Редкий",epic:"Эпический",legendary:"Легендарный"};
 
 const GEAR=[
- {id:"pick1",name:"Стальная кирка",icon:"⛏️",slot:"pick",cost:800,bonus:0.12,desc:"+12% добычи"},
- {id:"pick2",name:"Серебряная кирка",icon:"⚒️",slot:"pick",cost:5000,bonus:0.25,desc:"+25% добычи"},
- {id:"pick3",name:"Имперская кирка",icon:"🔱",slot:"pick",cost:25000,bonus:0.5,desc:"+50% добычи"},
- {id:"lamp1",name:"Масляный фонарь",icon:"🏮",slot:"lamp",cost:1000,bonus:0.1,desc:"+10% добычи"},
- {id:"lamp2",name:"Шахтный фонарь",icon:"🔦",slot:"lamp",cost:6500,bonus:0.22,desc:"+22% добычи"},
- {id:"uniform1",name:"Рабочая форма",icon:"🧥",slot:"uniform",cost:1200,bonus:0.08,desc:"+8% дохода"},
- {id:"uniform2",name:"Форма инженера",icon:"🎩",slot:"uniform",cost:9000,bonus:0.2,desc:"+20% дохода"}
+ {id:"pick1",name:"Стальная кирка",icon:"⛏️",slot:"pick",cost:800,bonus:.12,desc:"+12% добычи"},
+ {id:"pick2",name:"Серебряная кирка",icon:"⚒️",slot:"pick",cost:5000,bonus:.25,desc:"+25% добычи"},
+ {id:"pick3",name:"Имперская кирка",icon:"🔱",slot:"pick",cost:25000,bonus:.5,desc:"+50% добычи"},
+ {id:"lamp1",name:"Масляный фонарь",icon:"🏮",slot:"lamp",cost:1000,bonus:.1,desc:"+10% добычи"},
+ {id:"lamp2",name:"Шахтный фонарь",icon:"🔦",slot:"lamp",cost:6500,bonus:.22,desc:"+22% добычи"},
+ {id:"uniform1",name:"Рабочая форма",icon:"🧥",slot:"uniform",cost:1200,bonus:.08,desc:"+8% дохода"},
+ {id:"uniform2",name:"Форма инженера",icon:"🎩",slot:"uniform",cost:9000,bonus:.2,desc:"+20% дохода"}
 ];
+
 const BUILDINGS=[
  {id:"forge",name:"Кузница",icon:"🔥",desc:"Увеличивает эффективность шахтёров.",base:1500,bonus:"+5% добычи за уровень"},
  {id:"treasury",name:"Казначейство",icon:"🏦",desc:"Повышает прибыль от продажи руды.",base:2500,bonus:"+5% цена продажи за уровень"},
  {id:"lab",name:"Минералогическая лаборатория",icon:"🧪",desc:"Увеличивает шанс найти редкую руду.",base:4000,bonus:"+2% редкой руды за уровень"},
  {id:"academy",name:"Горная академия",icon:"🎓",desc:"Ускоряет получение опыта.",base:3500,bonus:"+10% опыта за уровень"},
- {id:"station",name:"Железнодорожная станция",icon:"🚂",desc:"Открывает торговые маршруты.",base:5000,bonus:"Новые маршруты и бонусы"},
+ {id:"station",name:"Железнодорожная станция",icon:"🚂",desc:"Открывает торговые маршруты.",base:5000,bonus:"Новые маршруты"},
  {id:"factory",name:"Имперский завод",icon:"🏭",desc:"Повышает промышленный доход.",base:9000,bonus:"+8% дохода за уровень"},
  {id:"bank",name:"Имперский банк",icon:"💰",desc:"Увеличивает награды контрактов.",base:12000,bonus:"+10% наград за уровень"}
 ];
+
 const ROUTES=[
- {id:"ural",name:"Уральский тракт",cost:0,time:60,mult:1.15,unlock:0},
- {id:"siberia",name:"Сибирский путь",cost:2500,time:120,mult:1.35,unlock:1},
- {id:"north",name:"Северный маршрут",cost:10000,time:240,mult:1.65,unlock:3},
- {id:"diamond",name:"Алмазный экспресс",cost:30000,time:360,mult:2,unlock:4}
+ {id:"ural",name:"Уральский тракт",time:60,mult:1.15,unlock:0},
+ {id:"siberia",name:"Сибирский путь",time:120,mult:1.35,unlock:1},
+ {id:"north",name:"Северный маршрут",time:240,mult:1.65,unlock:3},
+ {id:"diamond",name:"Алмазный экспресс",time:360,mult:2,unlock:4}
 ];
+
 const QUESTS=[
  {id:"q1",name:"Первый улов",desc:"Добудь 25 единиц руды",goal:25,reward:300,type:"mined"},
  {id:"q2",name:"Торговец",desc:"Продай 100 единиц руды",goal:100,reward:600,type:"sold"},
@@ -240,8 +247,9 @@ const QUESTS=[
  {id:"q8",name:"Железнодорожный магнат",desc:"Отправь поезд 3 раза",goal:3,reward:2500,type:"trains"},
  {id:"q9",name:"Исследователь",desc:"Заверши 2 экспедиции",goal:2,reward:3500,type:"expeditions"}
 ];
+
 const ACHIEVEMENTS=[
- ["first_mine","Первый рудник","Открой первую шахту",()=>S.stats.mined>=1],
+ ["first_mine","Первый рудник","Добудь первую руду",()=>S.stats.mined>=1],
  ["worker5","Крепкая артель","Собери 5 шахтёров",()=>S.workers.length>=5],
  ["ore10k","Большая добыча","Добудь 10 000 руды",()=>S.stats.mined>=10000],
  ["legend","Легенда гильдии","Получи легендарного шахтёра",()=>S.workers.some(w=>WORKERS[w.id]?.rarity==="legendary")],
@@ -257,347 +265,644 @@ function fresh(){
   ores:{iron:0,copper:0,silver:0,gold:0,amethyst:0,emerald:0,diamond:0},
   mines:[0],currentMine:0,workers:[],buildings:{},gear:[],
   equipment:{},stats:{mined:0,sold:0,trains:0,expeditions:0},
-  quests:{},achievements:{},collections:{},pity:{wood:0,iron:0,gold:0,imperial:0},
-  trains:[],expeditions:[],contracts:[],lastTime:now(),lastDaily:0,
-  dailyStreak:0,selectedOre:"iron",lastSave:now()
+  quests:{},achievements:{},collections:{},
+  pity:{wood:0,iron:0,gold:0,imperial:0},
+  trains:[],expeditions:[],contracts:[],
+  lastTime:now(),lastDaily:0,dailyStreak:0
  };
 }
-let S=fresh(),tab="mine",lastClick=0,tickCount=0;
+
+let S=fresh();
+let tab="mine";
+let lastClick=0;
+let tickCount=0;
+
+function safeNumber(v,min=0,max=1e12){
+ const n=Number(v);
+ return Number.isFinite(n)?Math.max(min,Math.min(max,n)):min;
+}
 
 function normalize(raw){
  const d=fresh();
  if(!raw||typeof raw!=="object")return d;
- const n=(v,min=0,max=1e12)=>Number.isFinite(Number(v))?Math.max(min,Math.min(max,Number(v))):min;
- d.money=n(raw.money);d.xp=n(raw.xp);d.level=n(raw.level,1,999);
- d.tokens=n(raw.tokens);d.rep=n(raw.rep);
- for(const k in d.ores)d.ores[k]=n(raw.ores?.[k]);
- d.mines=[...new Set((Array.isArray(raw.mines)?raw.mines:[0]).map(Number).filter(x=>Number.isInteger(x)&&x>=0&&x<MINES.length))];
+
+ d.money=safeNumber(raw.money);
+ d.xp=safeNumber(raw.xp);
+ d.level=safeNumber(raw.level,1,999);
+ d.tokens=safeNumber(raw.tokens);
+ d.rep=safeNumber(raw.rep);
+
+ for(const k in d.ores)d.ores[k]=safeNumber(raw.ores?.[k]);
+
+ d.mines=[...new Set(
+  (Array.isArray(raw.mines)?raw.mines:[0])
+  .map(Number)
+  .filter(x=>Number.isInteger(x)&&x>=0&&x<MINES.length)
+ )];
  if(!d.mines.length)d.mines=[0];
- d.currentMine=d.mines.includes(Number(raw.currentMine))?Number(raw.currentMine):d.mines[0];
- d.workers=Array.isArray(raw.workers)?raw.workers.slice(0,100).map(w=>{
-  const id=n(w.id,0,WORKERS.length-1);
-  const mine=d.mines.includes(Number(w.mine))?Number(w.mine):d.mines[0];
-  const allowed=MINES[mine].ores;
-  return {uid:w.uid||uid(),id,level:n(w.level,1,4),mine,resource:allowed.includes(w.resource)?w.resource:allowed[0]};
- }):[];
- for(const b of BUILDINGS)d.buildings[b.id]=n(raw.buildings?.[b.id],0,100);
- d.gear=Array.isArray(raw.gear)?raw.gear.filter(id=>GEAR.some(g=>g.id===id)):[];
+
+ d.currentMine=d.mines.includes(Number(raw.currentMine))
+  ?Number(raw.currentMine):d.mines[0];
+
+ d.workers=Array.isArray(raw.workers)
+  ?raw.workers.slice(0,100).map(w=>{
+   const id=safeNumber(w.id,0,WORKERS.length-1);
+   const mine=d.mines.includes(Number(w.mine))
+    ?Number(w.mine):d.mines[0];
+   const allowed=MINES[mine].ores;
+   return {
+    uid:w.uid||uid(),
+    id:Math.floor(id),
+    level:safeNumber(w.level,1,4),
+    mine,
+    resource:allowed.includes(w.resource)?w.resource:allowed[0]
+   };
+  }):[];
+
+ for(const b of BUILDINGS){
+  d.buildings[b.id]=safeNumber(raw.buildings?.[b.id],0,100);
+ }
+
+ d.gear=Array.isArray(raw.gear)
+  ?raw.gear.filter(id=>GEAR.some(g=>g.id===id)):[];
  d.equipment={};
+
  for(const slot of ["pick","lamp","uniform"]){
   const id=raw.equipment?.[slot];
   d.equipment[slot]=d.gear.includes(id)?id:null;
  }
+
  d.stats={...d.stats,...(raw.stats||{})};
- for(const k in d.stats)d.stats[k]=n(d.stats[k]);
- d.quests=raw.quests||{};d.achievements=raw.achievements||{};
- d.collections=raw.collections||{};d.pity={...d.pity,...(raw.pity||{})};
+ for(const k in d.stats)d.stats[k]=safeNumber(d.stats[k]);
+
+ d.quests=raw.quests&&typeof raw.quests==="object"?raw.quests:{};
+ d.achievements=raw.achievements&&typeof raw.achievements==="object"?raw.achievements:{};
+ d.collections=raw.collections&&typeof raw.collections==="object"?raw.collections:{};
+ d.pity={...d.pity,...(raw.pity||{})};
+
  d.trains=Array.isArray(raw.trains)?raw.trains:[];
  d.expeditions=Array.isArray(raw.expeditions)?raw.expeditions:[];
  d.contracts=Array.isArray(raw.contracts)?raw.contracts:[];
- d.lastDaily=n(raw.lastDaily);d.dailyStreak=n(raw.dailyStreak);
- d.lastTime=n(raw.lastTime,now()-3600000);
- d.selectedOre=ORES[raw.selectedOre]?raw.selectedOre:MINES[d.currentMine].ores[0];
+
+ d.lastDaily=safeNumber(raw.lastDaily);
+ d.dailyStreak=safeNumber(raw.dailyStreak,0,7);
+ d.lastTime=safeNumber(raw.lastTime,0,now());
+
+ d.selectedOre=ORES[raw.selectedOre]
+  ?raw.selectedOre:MINES[d.currentMine].ores[0];
+
  return d;
 }
+
 function load(){
  let raw=null;
- for(const key of ["minerEmpire_v7","minerEmpire_v6","minerEmpire_v5","minerEmpire_v4","minerEmpire_v3","minerEmpireSave","shakhtyorGame"]){
-  try{const x=localStorage.getItem(key);if(x){raw=JSON.parse(x);break}}catch(e){}
+ const keys=[
+  "minerEmpire_v7","minerEmpire_v6","minerEmpire_v5",
+  "minerEmpire_v4","minerEmpire_v3","minerEmpireSave","shakhtyorGame"
+ ];
+ for(const key of keys){
+  try{
+   const value=localStorage.getItem(key);
+   if(value){raw=JSON.parse(value);break;}
+  }catch(e){}
  }
  S=normalize(raw);
 }
+
 function save(){
  try{
-  S.lastSave=now();
   localStorage.setItem("minerEmpire_v7",JSON.stringify(S));
- }catch(e){toast("Не удалось сохранить прогресс");}
-}
-function toast(msg){
- const el=$("toast");el.textContent=msg;el.style.display="block";
- clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.style.display="none",2300);
-}
-function xpNeed(){return 100+(S.level-1)*65}
-function addXP(v){
- S.xp+=Math.floor(v*(1+S.buildings.academy*.1));
- while(S.xp>=xpNeed()){
-  S.xp-=xpNeed();S.level++;S.money+=S.level*100;
-  toast("Новый уровень! Теперь вы "+S.level+" уровня");
+ }catch(e){
+  toast("Не удалось сохранить игру");
  }
 }
+
+function toast(msg){
+ const el=$("toast");
+ el.textContent=msg;
+ el.style.display="block";
+ clearTimeout(toast.timer);
+ toast.timer=setTimeout(()=>el.style.display="none",2300);
+}
+
+function xpNeed(){return 100+(S.level-1)*65}
+
+function addXP(value){
+ S.xp+=Math.floor(value*(1+S.buildings.academy*.1));
+ while(S.xp>=xpNeed()){
+  S.xp-=xpNeed();
+  S.level++;
+  S.money+=S.level*100;
+  toast("Новый уровень: "+S.level);
+ }
+}
+
 function gearBonus(slot){
  const g=GEAR.find(x=>x.id===S.equipment[slot]);
  return g?g.bonus:0;
 }
+
 function totalBonus(){
  return 1+gearBonus("pick")+gearBonus("lamp")+
  S.buildings.forge*.05+S.buildings.factory*.08;
 }
+
 function workerRate(w){
- const def=WORKERS[w.id];if(!def)return 0;
- const mine=MINES[w.mine];if(!mine)return 0;
- const levelBonus=1+(w.level-1)*.25;
- return def.power*levelBonus*mine.mult*.12*totalBonus();
+ const def=WORKERS[w.id];
+ const mine=MINES[w.mine];
+ if(!def||!mine)return 0;
+ return def.power*(1+(w.level-1)*.25)*mine.mult*.12*totalBonus();
 }
+
 function income(){
  return S.workers.reduce((a,w)=>a+workerRate(w),0)*60;
 }
-function getWorker(id){return WORKERS[id]}
-function randomOre(mine){
- const ores=MINES[mine].ores;
+
+function randomOre(mineId){
+ const ores=MINES[mineId].ores;
  const lab=S.buildings.lab*.02;
- const weights=ores.map((o,i)=>i===0?45: i===1?30:Math.max(5,20+lab*100));
+ const weights=ores.map((o,i)=>i===0?45:i===1?30:Math.max(5,20+lab*100));
  let r=Math.random()*weights.reduce((a,b)=>a+b,0);
- for(let i=0;i<ores.length;i++){r-=weights[i];if(r<=0)return ores[i]}
+ for(let i=0;i<ores.length;i++){
+  r-=weights[i];
+  if(r<=0)return ores[i];
+ }
  return ores[0];
 }
+
 function addOre(id,amount){
  if(!ORES[id])return;
- S.ores[id]+=amount;S.stats.mined+=amount;
+ S.ores[id]+=amount;
+ S.stats.mined+=amount;
 }
+
 function manualMine(){
  if(now()-lastClick<430)return;
  lastClick=now();
  const ore=randomOre(S.currentMine);
  const amount=1+(Math.random()<.12?1:0);
- addOre(ore,amount);addXP(5);
+ addOre(ore,amount);
+ addXP(5);
  render();
 }
+
 function sellOre(id,amount){
  amount=Math.min(S.ores[id]||0,Math.floor(amount));
  if(amount<=0)return toast("Нет этой руды для продажи");
- const price=ORES[id].price*(1+S.buildings.treasury*.05)*(1+gearBonus("uniform"));
+
+ const price=ORES[id].price*
+ (1+S.buildings.treasury*.05)*(1+gearBonus("uniform"));
  const earned=Math.floor(amount*price);
- S.ores[id]-=amount;S.money+=earned;S.stats.sold+=amount;
- addXP(Math.ceil(amount*.15));S.rep+=Math.floor(amount/20);
+
+ S.ores[id]-=amount;
+ S.money+=earned;
+ S.stats.sold+=amount;
+ addXP(Math.ceil(amount*.15));
+ S.rep+=Math.floor(amount/20);
+
  toast("Продано: "+fmt(earned)+" монет");
- save();render();
+ save();
+ render();
 }
+
 function sellAll(){
  let total=0;
  for(const id in S.ores){
   const amount=S.ores[id];
-  total+=amount*ORES[id].price*(1+S.buildings.treasury*.05)*(1+gearBonus("uniform"));
-  S.stats.sold+=amount;S.ores[id]=0;
+  total+=amount*ORES[id].price*
+   (1+S.buildings.treasury*.05)*(1+gearBonus("uniform"));
+  S.stats.sold+=amount;
+  S.ores[id]=0;
  }
  if(total<=0)return toast("Нет руды для продажи");
- S.money+=Math.floor(total);S.rep+=Math.floor(total/1000);addXP(20);
+
+ S.money+=Math.floor(total);
+ S.rep+=Math.floor(total/1000);
+ addXP(20);
  toast("Вся руда продана");
- save();render();
+ save();
+ render();
 }
+
 function buyMine(id){
  const m=MINES[id];
- if(S.mines.includes(id))return;
+ if(!m||S.mines.includes(id))return;
  if(S.level<m.level)return toast("Требуется "+m.level+" уровень");
  if(S.money<m.cost)return toast("Недостаточно монет");
- S.money-=m.cost;S.mines.push(id);S.currentMine=id;
- S.selectedOre=m.ores[0];addXP(40);
- toast("Открыта шахта: "+m.name);save();render();
+
+ S.money-=m.cost;
+ S.mines.push(id);
+ S.currentMine=id;
+ S.selectedOre=m.ores[0];
+ addXP(40);
+ toast("Открыта шахта: "+m.name);
+ save();
+ render();
 }
+
 function chooseMine(id){
  if(!S.mines.includes(id))return;
- S.currentMine=id;S.selectedOre=MINES[id].ores[0];render();
+ S.currentMine=id;
+ S.selectedOre=MINES[id].ores[0];
+ render();
 }
-function workerCost(w){return [0,0,0,0][w.level-1]||0}
-function assignWorker(uidValue,mine,resource){
- const w=S.workers.find(x=>x.uid===uidValue);if(!w)return;
- mine=Number(mine);
+
+function assignWorker(workerId,mineId,resource){
+ const w=S.workers.find(x=>x.uid===workerId);
+ if(!w)return;
+
+ const mine=Number(mineId);
  if(!S.mines.includes(mine))return toast("Шахта не открыта");
- if(!MINES[mine].ores.includes(resource))resource=MINES[mine].ores[0];
- w.mine=mine;w.resource=resource;save();render();
+
+ if(!MINES[mine].ores.includes(resource)){
+  resource=MINES[mine].ores[0];
+ }
+ w.mine=mine;
+ w.resource=resource;
+ save();
+ render();
 }
-function upgradeWorker(uidValue){
- const w=S.workers.find(x=>x.uid===uidValue);if(!w)return;
+
+function upgradeWorker(workerId){
+ const w=S.workers.find(x=>x.uid===workerId);
+ if(!w)return;
  if(w.level>=4)return toast("Максимальный уровень");
+
  const cost=300*w.level*w.level;
  if(S.tokens<1)return toast("Нужен 1 жетон");
  if(S.money<cost)return toast("Нужно "+fmt(cost)+" монет");
- S.tokens--;S.money-=cost;w.level++;
- toast("Шахтёр повышен до уровня "+w.level);save();render();
+
+ S.tokens--;
+ S.money-=cost;
+ w.level++;
+ toast("Шахтёр повышен до уровня "+w.level);
+ save();
+ render();
 }
+
 function rarityRoll(weights){
  let r=Math.random()*weights.reduce((a,b)=>a+b,0);
- for(let i=0;i<weights.length;i++){r-=weights[i];if(r<=0)return RARITIES[i]}
+ for(let i=0;i<weights.length;i++){
+  r-=weights[i];
+  if(r<=0)return RARITIES[i];
+ }
  return "common";
 }
+
 function openChest(id){
- const c=CHESTS.find(x=>x.id===id);if(!c)return;
+ const c=CHESTS.find(x=>x.id===id);
+ if(!c)return;
  if(S.money<c.cost)return toast("Недостаточно монет");
+
  S.money-=c.cost;
  const pityLimit={wood:20,iron:15,gold:10,imperial:5};
  let rarity=rarityRoll(c.weights);
- if(S.pity[id]>=pityLimit[id]-1 && RARITIES.indexOf(rarity)<2)rarity="rare";
- if(rarity==="legendary"||rarity==="epic"||rarity==="rare")S.pity[id]=0;
- else S.pity[id]=(S.pity[id]||0)+1;
+
+ if(S.pity[id]>=pityLimit[id]-1&&
+ RARITIES.indexOf(rarity)<2){
+  rarity="rare";
+ }
+
+ if(["rare","epic","legendary"].includes(rarity)){
+  S.pity[id]=0;
+ }else{
+  S.pity[id]=(S.pity[id]||0)+1;
+ }
+
  const options=WORKERS.filter(w=>w.rarity===rarity);
  const def=options[Math.floor(Math.random()*options.length)]||WORKERS[0];
  const existing=S.workers.find(w=>w.id===def.id);
+
  let result;
  if(existing){
-  const tokens={common:1,uncommon:2,rare:3,epic:5,legendary:8}[rarity];
-  S.tokens+=tokens;result="Дубликат! Получено жетонов: "+tokens;
+  const tokens={
+   common:1,uncommon:2,rare:3,epic:5,legendary:8
+  }[rarity];
+  S.tokens+=tokens;
+  result="Дубликат! Получено жетонов: "+tokens;
  }else{
-  S.workers.push({uid:uid(),id:def.id,level:1,mine:S.currentMine,resource:MINES[S.currentMine].ores[0]});
+  S.workers.push({
+   uid:uid(),id:def.id,level:1,
+   mine:S.currentMine,
+   resource:MINES[S.currentMine].ores[0]
+  });
   result="Новый шахтёр: "+def.name;
  }
- S.collections[def.id]=true;addXP(20);
- toast(RUS[rarity]+": "+result);save();render();
+
+ S.collections[def.id]=true;
+ addXP(20);
+ toast(RUS[rarity]+": "+result);
+ save();
+ render();
 }
+
 function buyBuilding(id){
- const b=BUILDINGS.find(x=>x.id===id);if(!b)return;
- const lvl=S.buildings[id]||0,cost=Math.floor(b.base*Math.pow(1.75,lvl));
+ const b=BUILDINGS.find(x=>x.id===id);
+ if(!b)return;
+
+ const lvl=S.buildings[id]||0;
+ const cost=Math.floor(b.base*Math.pow(1.75,lvl));
  if(S.money<cost)return toast("Недостаточно монет");
- S.money-=cost;S.buildings[id]=lvl+1;addXP(25);
- toast(b.name+" улучшено");save();render();
+
+ S.money-=cost;
+ S.buildings[id]=lvl+1;
+ addXP(25);
+ toast(b.name+" улучшено");
+ save();
+ render();
 }
+
 function buyGear(id){
- const g=GEAR.find(x=>x.id===id);if(!g)return;
+ const g=GEAR.find(x=>x.id===id);
+ if(!g)return;
  if(S.gear.includes(id))return toast("Уже куплено");
  if(S.money<g.cost)return toast("Недостаточно монет");
- S.money-=g.cost;S.gear.push(id);
+
+ S.money-=g.cost;
+ S.gear.push(id);
  if(!S.equipment[g.slot])S.equipment[g.slot]=id;
- save();render();
+
+ save();
+ render();
 }
+
 function equip(id){
- const g=GEAR.find(x=>x.id===id);if(!g||!S.gear.includes(id))return;
- S.equipment[g.slot]=id;toast("Экипировка установлена");save();render();
+ const g=GEAR.find(x=>x.id===id);
+ if(!g||!S.gear.includes(id))return;
+
+ S.equipment[g.slot]=id;
+ toast("Экипировка установлена");
+ save();
+ render();
 }
+
 function sendTrain(routeId){
- const r=ROUTES.find(x=>x.id===routeId);if(!r)return;
+ const r=ROUTES.find(x=>x.id===routeId);
+ if(!r)return;
  if(S.buildings.station<1)return toast("Сначала постройте станцию");
  if(!S.mines.includes(r.unlock))return toast("Сначала откройте нужную шахту");
  if(S.trains.some(t=>t.route===routeId))return toast("Этот поезд уже в пути");
+
  const cargo={};
  let total=0;
+
  for(const id of MINES[r.unlock].ores){
   const amount=Math.min(S.ores[id],Math.floor(5+S.level*2));
-  if(amount>0){cargo[id]=amount;S.ores[id]-=amount;total+=amount*ORES[id].price}
+  if(amount>0){
+   cargo[id]=amount;
+   S.ores[id]-=amount;
+   total+=amount*ORES[id].price;
+  }
  }
+
  if(total<100)return toast("Нужно больше руды для отправки");
- S.trains.push({id:uid(),route:routeId,finish:now()+r.time*1000,value:Math.floor(total*r.mult),cargo});
- toast("Поезд отправлен!");save();render();
+
+ S.trains.push({
+  id:uid(),route:routeId,
+  finish:now()+r.time*1000,
+  value:Math.floor(total*r.mult),cargo
+ });
+
+ toast("Поезд отправлен!");
+ save();
+ render();
 }
+
 function collectTrain(id){
- const t=S.trains.find(x=>x.id===id);if(!t||now()<t.finish)return;
- S.money+=t.value;S.rep+=Math.floor(t.value/500);S.stats.trains++;
- S.trains=S.trains.filter(x=>x.id!==id);addXP(35);
- toast("Поезд прибыл! Получено "+fmt(t.value));save();render();
+ const t=S.trains.find(x=>x.id===id);
+ if(!t||now()<t.finish)return;
+
+ S.money+=t.value;
+ S.rep+=Math.floor(t.value/500);
+ S.stats.trains++;
+ S.trains=S.trains.filter(x=>x.id!==id);
+ addXP(35);
+
+ toast("Поезд прибыл! Получено "+fmt(t.value));
+ save();
+ render();
 }
+
 function sendExpedition(){
  if(S.workers.length<2)return toast("Нужно минимум 2 шахтёра");
- if(S.expeditions.length>=2)return toast("Все экспедиционные места заняты");
+ if(S.expeditions.length>=2)return toast("Все места заняты");
+
  const cost=500+S.expeditions.length*500;
  if(S.money<cost)return toast("Нужно "+cost+" монет");
+
  S.money-=cost;
  const team=S.workers.slice(0,Math.min(3,S.workers.length));
  const power=team.reduce((a,w)=>a+workerRate(w),0);
- const duration=90000;
- S.expeditions.push({id:uid(),finish:now()+duration,power,reward:Math.floor(500+power*500+S.level*80)});
- toast("Экспедиция отправлена");save();render();
+
+ S.expeditions.push({
+  id:uid(),finish:now()+90000,
+  power,reward:Math.floor(500+power*500+S.level*80)
+ });
+
+ toast("Экспедиция отправлена");
+ save();
+ render();
 }
+
 function collectExpedition(id){
- const e=S.expeditions.find(x=>x.id===id);if(!e||now()<e.finish)return;
- const reward=e.reward;
- S.money+=reward;S.rep+=5;S.stats.expeditions++;
- if(Math.random()<.35)addOre(randomOre(S.currentMine),3);
+ const e=S.expeditions.find(x=>x.id===id);
+ if(!e||now()<e.finish)return;
+
+ S.money+=e.reward;
+ S.rep+=5;
+ S.stats.expeditions++;
+
+ if(Math.random()<.35){
+  addOre(randomOre(S.currentMine),3);
+ }
  if(Math.random()<.08)S.tokens++;
+
  S.expeditions=S.expeditions.filter(x=>x.id!==id);
- addXP(60);toast("Экспедиция вернулась с наградой");save();render();
+ addXP(60);
+
+ toast("Экспедиция вернулась с наградой");
+ save();
+ render();
 }
+
 function createContract(){
  if(S.contracts.length>=3)return toast("Слишком много активных заказов");
+
  const available=MINES[S.currentMine].ores;
  const ore=available[Math.floor(Math.random()*available.length)];
  const amount=10+Math.floor(Math.random()*30);
- S.contracts.push({id:uid(),ore,amount,reward:Math.floor(amount*ORES[ore].price*1.8+150),expires:now()+3600000});
- save();render();
+
+ S.contracts.push({
+  id:uid(),ore,amount,
+  reward:Math.floor(amount*ORES[ore].price*1.8+150),
+  expires:now()+3600000
+ });
+
+ save();
+ render();
 }
+
 function completeContract(id){
- const c=S.contracts.find(x=>x.id===id);if(!c)return;
+ const c=S.contracts.find(x=>x.id===id);
+ if(!c)return;
  if(S.ores[c.ore]<c.amount)return toast("Недостаточно руды");
+
  S.ores[c.ore]-=c.amount;
  const bonus=1+S.buildings.bank*.1;
- S.money+=Math.floor(c.reward*bonus);S.rep+=3;
+ S.money+=Math.floor(c.reward*bonus);
+ S.rep+=3;
  S.contracts=S.contracts.filter(x=>x.id!==id);
- addXP(30);S.stats.sold+=c.amount;
- toast("Контракт выполнен");save();render();
+ addXP(30);
+ S.stats.sold+=c.amount;
+
+ toast("Контракт выполнен");
+ save();
+ render();
 }
+
 function dailyReward(){
- const day=86400000;
- if(now()-S.lastDaily<day)return toast("Ежедневная награда уже получена");
+ if(now()-S.lastDaily<86400000){
+  return toast("Ежедневная награда уже получена");
+ }
+
  S.dailyStreak=Math.min(7,S.dailyStreak+1);
  const reward=500+S.dailyStreak*250;
- S.money+=reward;S.tokens+=S.dailyStreak%3===0?1:0;
- S.lastDaily=now();addXP(30);
- toast("Ежедневная награда: "+fmt(reward));save();render();
+
+ S.money+=reward;
+ if(S.dailyStreak%3===0)S.tokens++;
+ S.lastDaily=now();
+ addXP(30);
+
+ toast("Ежедневная награда: "+fmt(reward));
+ save();
+ render();
 }
-function claimQuest(id){
- const q=QUESTS.find(x=>x.id===id);if(!q||S.quests[id])return;
- const val=questValue(q.type);
- if(val<q.goal)return toast("Задание ещё не выполнено");
- S.quests[id]=true;S.money+=q.reward;S.rep+=2;addXP(35);
- toast("Задание выполнено!");save();render();
-}
+
 function questValue(type){
  switch(type){
- case "mined":return S.stats.mined;
- case "sold":return S.stats.sold;
- case "mines":return S.mines.length;
- case "workers":return S.workers.length;
- case "buildings":return Object.values(S.buildings).reduce((a,b)=>a+b,0);
- case "money":return S.money;
- case "trains":return S.stats.trains;
- case "expeditions":return S.stats.expeditions;
- default:return 0;
+  case "mined":return S.stats.mined;
+  case "sold":return S.stats.sold;
+  case "mines":return S.mines.length;
+  case "workers":return S.workers.length;
+  case "buildings":return Object.values(S.buildings).reduce((a,b)=>a+b,0);
+  case "money":return S.money;
+  case "trains":return S.stats.trains;
+  case "expeditions":return S.stats.expeditions;
+  default:return 0;
  }
 }
+
+function claimQuest(id){
+ const q=QUESTS.find(x=>x.id===id);
+ if(!q||S.quests[id])return;
+ if(questValue(q.type)<q.goal)return toast("Задание ещё не выполнено");
+
+ S.quests[id]=true;
+ S.money+=q.reward;
+ S.rep+=2;
+ addXP(35);
+
+ toast("Задание выполнено!");
+ save();
+ render();
+}
+
 function claimAchievement(id){
  if(S.achievements[id])return;
- const a=ACHIEVEMENTS.find(x=>x[0]===id);if(!a||!a[3]())return;
- S.achievements[id]=true;S.money+=1500;S.rep+=10;addXP(100);
- toast("Достижение получено!");save();render();
+ const a=ACHIEVEMENTS.find(x=>x[0]===id);
+ if(!a||!a[3]())return;
+
+ S.achievements[id]=true;
+ S.money+=1500;
+ S.rep+=10;
+ addXP(100);
+
+ toast("Достижение получено!");
+ save();
+ render();
 }
+
 function checkContracts(){
  const before=S.contracts.length;
  S.contracts=S.contracts.filter(c=>c.expires>now());
  if(before!==S.contracts.length)save();
 }
+
 function produce(seconds){
  for(const w of S.workers){
-  const def=WORKERS[w.id],mine=MINES[w.mine];
-  if(!def||!mine)continue;
-  const ore=mine.ores.includes(w.resource)?w.resource:mine.ores[0];
+  const mine=MINES[w.mine];
+  if(!mine)continue;
+
+  const ore=mine.ores.includes(w.resource)
+   ?w.resource:mine.ores[0];
+
   const amount=workerRate(w)*seconds/60;
-  S.ores[ore]+=amount;S.stats.mined+=amount;
+  S.ores[ore]+=amount;
+  S.stats.mined+=amount;
  }
 }
+
 function offline(){
  const current=now();
- const elapsed=Math.max(0,Math.min(4*3600000,current-(S.lastTime||current)));
+ const previous=Number(S.lastTime)||current;
+ const elapsed=Math.max(0,Math.min(4*3600000,current-previous));
  const seconds=elapsed/1000;
+
  if(seconds>60&&S.workers.length){
-  const gain=income()/60*seconds*.25;
   const totalRate=S.workers.reduce((a,w)=>a+workerRate(w),0);
+  const gain=totalRate*seconds/60*.25;
+
   if(totalRate>0){
    for(const w of S.workers){
     const share=workerRate(w)/totalRate;
-    S.ores[w.resource]+=gain*share;
-    S.stats.mined+=gain*share;
+    const amount=gain*share;
+    S.ores[w.resource]+=amount;
+    S.stats.mined+=amount;
    }
    toast("Пока вас не было, шахтёры добыли руду");
   }
  }
+
  S.lastTime=current;
 }
+
 function update(){
  const t=now();
+
  produce(1);
- for(const x of [...S.trains])if(t>=x.finish)collectTrain(x.id);
- for(const x of [...S.expeditions])if(t>=x.finish)collectExpedition(x.id);
+
+ for(const x of [...S.trains]){
+  if(t>=x.finish){
+   S.money+=x.value;
+   S.rep+=Math.floor(x.value/500);
+   S.stats.trains++;
+   S.trains=S.trains.filter(y=>y.id!==x.id);
+   addXP(35);
+  }
+ }
+
+ for(const x of [...S.expeditions]){
+  if(t>=x.finish){
+   S.money+=x.reward;
+   S.rep+=5;
+   S.stats.expeditions++;
+   if(Math.random()<.35)addOre(randomOre(S.currentMine),3);
+   if(Math.random()<.08)S.tokens++;
+   S.expeditions=S.expeditions.filter(y=>y.id!==x.id);
+   addXP(60);
+  }
+ }
+
  checkContracts();
+
  tickCount++;
- if(tickCount%10===0){S.lastTime=t;save();}
- if(tickCount%5===0&&tab==="mine")render();
+ if(tickCount%10===0)save();
+ if(tickCount%5===0){
+  headerStats();
+  if(tab==="mine")render();
+ }
 }
+
 function headerStats(){
  $("money").textContent=fmt(S.money)+" ₽";
  $("xp").textContent=fmt(S.xp)+"/"+fmt(xpNeed());
@@ -606,19 +911,33 @@ function headerStats(){
  $("rep").textContent=fmt(S.rep);
  $("income").textContent=income().toFixed(1)+"/мин";
 }
+
 function render(){
  headerStats();
- document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
+
+ document.querySelectorAll(".tabs button").forEach(b=>{
+  b.classList.toggle("active",b.dataset.tab===tab);
+ });
+
  const root=$("content");
+
  if(tab==="mine")root.innerHTML=renderMine();
  if(tab==="miners")root.innerHTML=renderMiners();
  if(tab==="chests")root.innerHTML=renderChests();
  if(tab==="industry")root.innerHTML=renderIndustry();
  if(tab==="more")root.innerHTML=renderMore();
 }
+
 function renderMine(){
  const m=MINES[S.currentMine];
- let oreHtml=m.ores.map(id=>`<div class="resource"><span>${ORES[id].icon} ${ORES[id].name}</span><b>${fmt(S.ores[id])}</b></div>`).join("");
+
+ const oreHtml=m.ores.map(id=>`
+  <div class="resource">
+   <span>${ORES[id].icon} ${ORES[id].name}</span>
+   <b>${fmt(S.ores[id])}</b>
+  </div>
+ `).join("");
+
  return `
  <section class="mine-scene">
   <div class="mine-icon">${m.icon}</div>
@@ -626,187 +945,357 @@ function renderMine(){
   <div class="mine-desc">${m.desc}</div>
   <div class="badge">Множитель шахты ×${m.mult}</div>
  </section>
+
  <button class="mine-btn" onclick="manualMine()">⚒ ДОБЫВАТЬ РУДУ</button>
+
  <section class="panel">
   <h2>Мои месторождения</h2>
-  <div class="resource-grid">${S.mines.map(id=>`<button onclick="chooseMine(${id})" ${id===S.currentMine?'disabled':''}>${MINES[id].icon} ${MINES[id].name}</button>`).join("")}</div>
+  <div class="resource-grid">
+   ${S.mines.map(id=>`
+    <button onclick="chooseMine(${id})" ${id===S.currentMine?"disabled":""}>
+     ${MINES[id].icon} ${MINES[id].name}
+    </button>
+   `).join("")}
+  </div>
  </section>
+
  <section class="panel">
   <h2>Добытые ресурсы</h2>
   <div class="resource-grid">${oreHtml}</div>
   <button style="width:100%;margin-top:12px" onclick="sellAll()">⚖ Продать всю руду</button>
  </section>
+
  <section class="panel">
   <h2>Открытие новых шахт</h2>
   ${MINES.map((x,i)=>`
    <div class="item">
-    <div class="item-top"><span class="item-title">${x.icon} ${x.name}</span>
-    <span class="badge">${S.mines.includes(i)?"Открыта":"Уровень "+x.level}</span></div>
+    <div class="item-top">
+     <span class="item-title">${x.icon} ${x.name}</span>
+     <span class="badge">${S.mines.includes(i)?"Открыта":"Уровень "+x.level}</span>
+    </div>
     <div class="muted">${x.desc}</div>
-    ${S.mines.includes(i)?`<button style="margin-top:8px" onclick="chooseMine(${i})">Перейти</button>`:
-    `<button style="margin-top:8px" onclick="buyMine(${i})">Открыть за ${fmt(x.cost)} ₽</button>`}
-   </div>`).join("")}
+    ${S.mines.includes(i)
+     ?`<button style="margin-top:8px" onclick="chooseMine(${i})">Перейти</button>`
+     :`<button style="margin-top:8px" onclick="buyMine(${i})">Открыть за ${fmt(x.cost)} ₽</button>`
+    }
+   </div>
+  `).join("")}
  </section>`;
 }
+
 function renderMiners(){
- return `
- <section class="panel">
-  <h2>⚜ Имперская гильдия шахтёров</h2>
-  <div class="row"><span>Работников: ${S.workers.length}/100</span><span>Доход: ${income().toFixed(2)}/мин</span></div>
-  <div class="notice">Работники добывают руду автоматически. Назначайте их на подходящие шахты и улучшайте их за жетоны.</div>
-  ${S.workers.length?S.workers.map(w=>{
-   const d=WORKERS[w.id],mine=MINES[w.mine];
-   return `<div class="item">
+ const workerCards=S.workers.map(w=>{
+  const d=WORKERS[w.id];
+  const mine=MINES[w.mine];
+
+  return `
+   <div class="item">
     <div class="item-top">
      <span class="item-title ${d.rarity}">${d.icon} ${d.name}</span>
      <span class="badge ${d.rarity}">${RUS[d.rarity]}</span>
     </div>
+
     <div class="muted">${d.spec} · Уровень ${w.level}/4</div>
     <div class="muted">Добыча: ${workerRate(w).toFixed(3)} ед./мин</div>
-    <label class="muted">Шахта:</label>
+
+    <div class="muted">Назначенная шахта:</div>
     <select onchange="assignWorker('${w.uid}',this.value,'${w.resource}')">
-     ${S.mines.map(id=>`<option value="${id}" ${id===w.mine?"selected":""}>${MINES[id].name}</option>`).join("")}
+     ${S.mines.map(id=>`
+      <option value="${id}" ${id===w.mine?"selected":""}>
+       ${MINES[id].name}
+      </option>
+     `).join("")}
     </select>
-    <label class="muted">Руда:</label>
+
+    <div class="muted">Добываемая руда:</div>
     <select onchange="assignWorker('${w.uid}',${w.mine},this.value)">
-     ${mine.ores.map(o=>`<option value="${o}" ${o===w.resource?"selected":""}>${ORES[o].name}</option>`).join("")}
+     ${mine.ores.map(o=>`
+      <option value="${o}" ${o===w.resource?"selected":""}>
+       ${ORES[o].name}
+      </option>
+     `).join("")}
     </select>
+
     <div class="item-actions">
-     <button onclick="upgradeWorker('${w.uid}')" ${w.level>=4?"disabled":""}>Улучшить · ${w.level} жетон + ${fmt(300*w.level*w.level)} ₽</button>
+     <button onclick="upgradeWorker('${w.uid}')" ${w.level>=4?"disabled":""}>
+      Улучшить · ${w.level} жетон + ${fmt(300*w.level*w.level)} ₽
+     </button>
     </div>
-   </div>`;
-  }).join(""):`<div class="muted">Пока у вас нет шахтёров. Откройте сундук!</div>`:
-  ""}
+   </div>
+  `;
+ }).join("");
+
+ const catalog=WORKERS.map(w=>`
+  <div class="item">
+   <div class="row">
+    <span class="${w.rarity}">${w.icon} ${w.name}</span>
+    <span class="badge ${w.rarity}">${RUS[w.rarity]}</span>
+   </div>
+   <div class="muted">
+    ${w.spec} · Сила ${w.power} ·
+    ${S.collections[w.id]?"Получен":"Ещё не найден"}
+   </div>
+  </div>
+ `).join("");
+
+ return `
+ <section class="panel">
+  <h2>⚜ Имперская гильдия шахтёров</h2>
+  <div class="row">
+   <span>Работников: ${S.workers.length}/100</span>
+   <span>Доход: ${income().toFixed(2)}/мин</span>
+  </div>
+  <div class="notice">
+   Работники добывают руду автоматически. Назначайте их на подходящие шахты и улучшайте за жетоны.
+  </div>
+  ${S.workers.length?workerCards:
+   '<div class="muted">Пока у вас нет шахтёров. Откройте сундук!</div>'}
  </section>
+
  <section class="panel">
   <h2>📖 Каталог работников</h2>
-  ${WORKERS.map(w=>`
-   <div class="item">
-    <div class="row"><span class="${w.rarity}">${w.icon} ${w.name}</span>
-    <span class="badge ${w.rarity}">${RUS[w.rarity]}</span></div>
-    <div class="muted">${w.spec} · Сила ${w.power} · ${S.collections[w.id]?"Получен":"Ещё не найден"}</div>
-   </div>`).join("")}
+  ${catalog}
  </section>`;
 }
+
 function renderChests(){
  return `
  <section class="panel">
   <h2>🎁 Имперская сокровищница</h2>
-  <div class="notice">Дубликаты превращаются в жетоны. После серии неудач сундук гарантирует редкого или более ценного работника.</div>
-  ${CHESTS.map(c=>`
-   <div class="item">
-    <div class="item-top"><span class="item-title">${c.icon} ${c.name}</span><b class="gold">${fmt(c.cost)} ₽</b></div>
-    <div class="muted">${c.desc}</div>
-    <div class="muted">Гарантия редкого: ${S.pity[c.id]||0}/${{wood:20,iron:15,gold:10,imperial:5}[c.id]}</div>
-    <button style="margin-top:8px" onclick="openChest('${c.id}')">Открыть сундук</button>
-   </div>`).join("")}
+  <div class="notice">
+   Дубликаты превращаются в жетоны. После серии неудач сундук гарантирует редкого или более ценного работника.
+  </div>
+
+  ${CHESTS.map(c=>{
+   const limit={wood:20,iron:15,gold:10,imperial:5}[c.id];
+   return `
+    <div class="item">
+     <div class="item-top">
+      <span class="item-title">${c.icon} ${c.name}</span>
+      <b class="gold">${fmt(c.cost)} ₽</b>
+     </div>
+     <div class="muted">${c.desc}</div>
+     <div class="muted">Гарантия редкого: ${S.pity[c.id]||0}/${limit}</div>
+     <button style="margin-top:8px" onclick="openChest('${c.id}')">Открыть сундук</button>
+    </div>
+   `;
+  }).join("")}
  </section>
+
  <section class="panel">
   <h2>Шансы выпадения</h2>
-  ${CHESTS.map(c=>`<div class="item"><b>${c.name}</b><div class="muted">${c.weights.map((v,i)=>v?RUS[RARITIES[i]]+": "+v+"%":null).filter(Boolean).join(" · ")}</div></div>`).join("")}
+  ${CHESTS.map(c=>`
+   <div class="item">
+    <b>${c.name}</b>
+    <div class="muted">
+     ${c.weights.map((v,i)=>v?RUS[RARITIES[i]]+": "+v+"%":null).filter(Boolean).join(" · ")}
+    </div>
+   </div>
+  `).join("")}
  </section>`;
 }
+
 function renderIndustry(){
  return `
  <section class="panel">
   <h2>🏛️ Имперская промышленность</h2>
-  <div class="notice">Стройте учреждения, чтобы усиливать производство, торговлю и развитие державы.</div>
+  <div class="notice">
+   Стройте учреждения, чтобы усиливать производство, торговлю и развитие державы.
+  </div>
+
   ${BUILDINGS.map(b=>{
-   const lvl=S.buildings[b.id]||0,cost=Math.floor(b.base*Math.pow(1.75,lvl));
-   return `<div class="item">
-    <div class="item-top"><span class="item-title">${b.icon} ${b.name}</span><span class="badge">Уровень ${lvl}</span></div>
-    <div class="muted">${b.desc}</div><div class="muted">${b.bonus}</div>
-    <button style="margin-top:8px" onclick="buyBuilding('${b.id}')">Улучшить · ${fmt(cost)} ₽</button>
-   </div>`;
+   const lvl=S.buildings[b.id]||0;
+   const cost=Math.floor(b.base*Math.pow(1.75,lvl));
+
+   return `
+    <div class="item">
+     <div class="item-top">
+      <span class="item-title">${b.icon} ${b.name}</span>
+      <span class="badge">Уровень ${lvl}</span>
+     </div>
+     <div class="muted">${b.desc}</div>
+     <div class="muted">${b.bonus}</div>
+     <button style="margin-top:8px" onclick="buyBuilding('${b.id}')">
+      Улучшить · ${fmt(cost)} ₽
+     </button>
+    </div>
+   `;
   }).join("")}
  </section>
+
  <section class="panel">
   <h2>🚂 Железная дорога</h2>
-  <div class="muted">Для отправки поездов сначала постройте железнодорожную станцию. Поезд перевозит часть руды и возвращается с прибылью.</div>
+  <div class="muted">
+   Для отправки поездов сначала постройте железнодорожную станцию.
+  </div>
+
   ${ROUTES.map(r=>{
    const active=S.trains.find(t=>t.route===r.id);
-   return `<div class="item">
-    <div class="item-top"><span class="item-title">${r.name}</span><span class="badge">×${r.mult}</span></div>
-    <div class="muted">Требуется шахта: ${MINES[r.unlock].name} · Время: ${Math.ceil(r.time/60)} мин.</div>
-    ${active?`<div class="notice">Поезд в пути. Прибытие через ${Math.max(0,Math.ceil((active.finish-now())/1000))} сек.</div><button onclick="collectTrain('${active.id}')" ${now()<active.finish?"disabled":""}>Получить ${fmt(active.value)} ₽</button>`:
-    `<button onclick="sendTrain('${r.id}')">Отправить поезд</button>`}
-   </div>`;
+   return `
+    <div class="item">
+     <div class="item-top">
+      <span class="item-title">${r.name}</span>
+      <span class="badge">×${r.mult}</span>
+     </div>
+     <div class="muted">
+      Требуется шахта: ${MINES[r.unlock].name} ·
+      Время: ${Math.ceil(r.time/60)} мин.
+     </div>
+     ${active
+      ?`<div class="notice">Поезд в пути. Осталось ${Math.max(0,Math.ceil((active.finish-now())/1000))} сек.</div>
+        <button onclick="collectTrain('${active.id}')" ${now()<active.finish?"disabled":""}>
+         Получить ${fmt(active.value)} ₽
+        </button>`
+      :`<button onclick="sendTrain('${r.id}')">Отправить поезд</button>`
+     }
+    </div>
+   `;
   }).join("")}
-  ${S.trains.map(t=>`<div class="muted">Поезд: ${ROUTES.find(r=>r.id===t.route)?.name||"Маршрут"} · ${Math.max(0,Math.ceil((t.finish-now())/1000))} сек.</div>`).join("")}
  </section>`;
 }
+
 function renderMore(){
  return `
  <section class="panel">
   <h2>🧭 Экспедиции</h2>
-  <div class="muted">Отправляйте артель на разведку. Через некоторое время она вернётся с монетами, опытом и шансом найти редкие ресурсы.</div>
+  <div class="muted">
+   Отправляйте артель на разведку. Через некоторое время она вернётся с монетами, опытом и шансом найти редкие ресурсы.
+  </div>
   <button style="margin-top:10px" onclick="sendExpedition()">Отправить экспедицию</button>
-  ${S.expeditions.map(e=>`<div class="item">
-   <b>Экспедиционная артель</b>
-   <div class="muted">Награда: ${fmt(e.reward)} ₽ · Осталось ${Math.max(0,Math.ceil((e.finish-now())/1000))} сек.</div>
-   <button onclick="collectExpedition('${e.id}')" ${now()<e.finish?"disabled":""}>Забрать награду</button>
-  </div>`).join("")}
+
+  ${S.expeditions.map(e=>`
+   <div class="item">
+    <b>Экспедиционная артель</b>
+    <div class="muted">Награда: ${fmt(e.reward)} ₽</div>
+    <div class="muted">Осталось ${Math.max(0,Math.ceil((e.finish-now())/1000))} сек.</div>
+    <button onclick="collectExpedition('${e.id}')" ${now()<e.finish?"disabled":""}>
+     Забрать награду
+    </button>
+   </div>
+  `).join("")}
  </section>
+
  <section class="panel">
   <h2>📜 Торговые контракты</h2>
-  <div class="muted">Выполняйте заказы торговцев, получайте монеты и репутацию.</div>
+  <div class="muted">Выполняйте заказы торговцев и получайте монеты и репутацию.</div>
   <button style="margin-top:9px" onclick="createContract()">Получить новый заказ</button>
-  ${S.contracts.map(c=>`<div class="item">
-   <div class="item-title">${ORES[c.ore].icon} Заказ на ${ORES[c.ore].name}</div>
-   <div class="muted">Нужно: ${fmt(c.amount)} · Награда: ${fmt(c.reward)} ₽</div>
-   <div class="muted">Срок: ${Math.max(0,Math.ceil((c.expires-now())/60000))} мин.</div>
-   <button onclick="completeContract('${c.id}')">Выполнить</button>
-  </div>`).join("")}
+
+  ${S.contracts.map(c=>`
+   <div class="item">
+    <div class="item-title">${ORES[c.ore].icon} Заказ на ${ORES[c.ore].name}</div>
+    <div class="muted">Нужно: ${fmt(c.amount)} · Награда: ${fmt(c.reward)} ₽</div>
+    <div class="muted">Срок: ${Math.max(0,Math.ceil((c.expires-now())/60000))} мин.</div>
+    <button onclick="completeContract('${c.id}')">Выполнить</button>
+   </div>
+  `).join("")}
  </section>
+
  <section class="panel">
   <h2>🧰 Снаряжение</h2>
   <div class="muted">Покупайте инструменты и экипируйте их. Каждый слот даёт отдельный бонус.</div>
+
   ${["pick","lamp","uniform"].map(slot=>{
    const g=GEAR.find(x=>x.id===S.equipment[slot]);
-   return `<div class="item"><b>${slot==="pick"?"Кирка":slot==="lamp"?"Фонарь":"Форма"}:</b> ${g?g.name:"Не экипировано"}</div>`;
+   const name=slot==="pick"?"Кирка":slot==="lamp"?"Фонарь":"Форма";
+   return `<div class="item"><b>${name}:</b> ${g?g.name:"Не экипировано"}</div>`;
   }).join("")}
-  ${GEAR.map(g=>`<div class="item">
-   <div class="row"><span class="item-title">${g.icon} ${g.name}</span><b>${g.desc}</b></div>
-   <div class="muted">Цена: ${fmt(g.cost)} ₽</div>
-   ${S.gear.includes(g.id)?`<button onclick="equip('${g.id}')">${S.equipment[g.slot]===g.id?"Надето":"Экипировать"}</button>`:`<button onclick="buyGear('${g.id}')">Купить</button>`}
-  </div>`).join("")}
+
+  ${GEAR.map(g=>`
+   <div class="item">
+    <div class="row">
+     <span class="item-title">${g.icon} ${g.name}</span>
+     <b>${g.desc}</b>
+    </div>
+    <div class="muted">Цена: ${fmt(g.cost)} ₽</div>
+    ${S.gear.includes(g.id)
+     ?`<button onclick="equip('${g.id}')">
+        ${S.equipment[g.slot]===g.id?"Надето":"Экипировать"}
+       </button>`
+     :`<button onclick="buyGear('${g.id}')">Купить</button>`
+    }
+   </div>
+  `).join("")}
  </section>
+
  <section class="panel">
   <h2>📋 Задания</h2>
   ${QUESTS.map(q=>{
-   const val=questValue(q.type),done=val>=q.goal;
-   return `<div class="item">
-    <div class="row"><b>${q.name}</b><span class="badge">${S.quests[q.id]?"Выполнено":done?"Готово":"В процессе"}</span></div>
-    <div class="muted">${q.desc}</div>
-    <div class="progress"><span style="width:${Math.min(100,val/q.goal*100)}%"></span></div>
-    <div class="muted">${fmt(val)} / ${fmt(q.goal)} · Награда ${fmt(q.reward)} ₽</div>
-    ${!S.quests[q.id]?`<button onclick="claimQuest('${q.id}')" ${!done?"disabled":""}>Забрать награду</button>`:""}
-   </div>`;
+   const val=questValue(q.type);
+   const done=val>=q.goal;
+
+   return `
+    <div class="item">
+     <div class="row">
+      <b>${q.name}</b>
+      <span class="badge">${S.quests[q.id]?"Выполнено":done?"Готово":"В процессе"}</span>
+     </div>
+     <div class="muted">${q.desc}</div>
+     <div class="progress">
+      <span style="width:${Math.min(100,val/q.goal*100)}%"></span>
+     </div>
+     <div class="muted">
+      ${fmt(val)} / ${fmt(q.goal)} · Награда ${fmt(q.reward)} ₽
+     </div>
+     ${!S.quests[q.id]
+      ?`<button onclick="claimQuest('${q.id}')" ${!done?"disabled":""}>Забрать награду</button>`
+      :""
+     }
+    </div>
+   `;
   }).join("")}
  </section>
+
  <section class="panel">
   <h2>🏅 Достижения</h2>
-  ${ACHIEVEMENTS.map(a=>`<div class="item">
-   <div class="row"><b>${a[1]}</b><span class="badge">${S.achievements[a[0]]?"Получено":a[3]()?"Доступно":"Не выполнено"}</span></div>
-   <div class="muted">${a[2]}</div>
-   ${!S.achievements[a[0]]?`<button onclick="claimAchievement('${a[0]}')" ${!a[3]()?"disabled":""}>Получить · 1 500 ₽</button>`:""}
-  </div>`).join("")}
+  ${ACHIEVEMENTS.map(a=>`
+   <div class="item">
+    <div class="row">
+     <b>${a[1]}</b>
+     <span class="badge">
+      ${S.achievements[a[0]]?"Получено":a[3]()?"Доступно":"Не выполнено"}
+     </span>
+    </div>
+    <div class="muted">${a[2]}</div>
+    ${!S.achievements[a[0]]
+     ?`<button onclick="claimAchievement('${a[0]}')" ${!a[3]()?"disabled":""}>Получить · 1 500 ₽</button>`
+     :""
+    }
+   </div>
+  `).join("")}
  </section>
+
  <section class="panel">
   <h2>📚 Альбом коллекционера</h2>
-  <div class="muted">Открыто ${Object.keys(S.collections).filter(k=>S.collections[k]).length} из ${WORKERS.length} шахтёров.</div>
-  <div class="progress"><span style="width:${Object.keys(S.collections).filter(k=>S.collections[k]).length/WORKERS.length*100}%"></span></div>
-  ${WORKERS.map(w=>`<div class="row item">
-   <span class="${w.rarity}">${S.collections[w.id]?w.icon:"❔"} ${S.collections[w.id]?w.name:"Неизвестный шахтёр"}</span>
-   <span class="badge ${w.rarity}">${S.collections[w.id]?RUS[w.rarity]:"???"}</span>
-  </div>`).join("")}
+  <div class="muted">
+   Открыто ${Object.keys(S.collections).filter(k=>S.collections[k]).length} из ${WORKERS.length} шахтёров.
+  </div>
+  <div class="progress">
+   <span style="width:${Object.keys(S.collections).filter(k=>S.collections[k]).length/WORKERS.length*100}%"></span>
+  </div>
+
+  ${WORKERS.map(w=>`
+   <div class="row item">
+    <span class="${w.rarity}">
+     ${S.collections[w.id]?w.icon:"❔"}
+     ${S.collections[w.id]?w.name:"Неизвестный шахтёр"}
+    </span>
+    <span class="badge ${w.rarity}">
+     ${S.collections[w.id]?RUS[w.rarity]:"???"}
+    </span>
+   </div>
+  `).join("")}
  </section>
+
  <section class="panel">
   <h2>🎁 Ежедневная награда</h2>
-  <div class="muted">Заходите каждый день и получайте всё более крупную награду. Каждые три дня — дополнительный жетон.</div>
+  <div class="muted">
+   Заходите каждый день и получайте всё более крупную награду.
+   Каждые три дня — дополнительный жетон.
+  </div>
   <div class="gold">Текущая серия: ${S.dailyStreak} дней</div>
   <button style="margin-top:8px" onclick="dailyReward()">Получить награду</button>
  </section>
+
  <section class="panel">
   <h2>📊 Статистика державы</h2>
   <div class="row"><span>Всего добыто</span><b>${fmt(S.stats.mined)}</b></div>
@@ -816,6 +1305,7 @@ function renderMore(){
   <div class="row"><span>Открыто шахт</span><b>${S.mines.length}/${MINES.length}</b></div>
   <div class="row"><span>Зданий построено</span><b>${Object.values(S.buildings).reduce((a,b)=>a+b,0)}</b></div>
  </section>
+
  <section class="panel">
   <h2>💾 Сохранение</h2>
   <div class="muted">Прогресс сохраняется в памяти браузера на этом устройстве.</div>
@@ -824,33 +1314,54 @@ function renderMore(){
 }
 
 document.addEventListener("click",e=>{
- const b=e.target.closest("[data-tab]");
- if(!b)return;
- tab=b.dataset.tab;render();
+ const button=e.target.closest("[data-tab]");
+ if(!button)return;
+ tab=button.dataset.tab;
+ render();
 });
+
 function start(){
  try{
   load();
   offline();
+
   const tg=window.Telegram?.WebApp;
-  if(tg){tg.ready();tg.expand();}
+  if(tg){
+   tg.ready();
+   tg.expand();
+  }
+
   $("loading").style.display="none";
   $("app").style.display="block";
-  render();save();
+
+  render();
+  save();
+
   setInterval(update,1000);
+
   document.addEventListener("visibilitychange",()=>{
    if(document.visibilityState==="hidden"){
-    S.lastTime=now();save();
+    S.lastTime=now();
+    save();
    }else{
-    offline();save();render();
+    offline();
+    save();
+    render();
    }
   });
-  window.addEventListener("pagehide",()=>{S.lastTime=now();save()});
+
+  window.addEventListener("pagehide",()=>{
+   S.lastTime=now();
+   save();
+  });
+
  }catch(err){
-  $("loadText").textContent="Не удалось загрузить игру: "+(err?.message||"неизвестная ошибка");
   console.error(err);
+  $("loadText").textContent=
+   "Ошибка запуска: "+(err?.message||"неизвестная ошибка");
  }
 }
+
 start();
 </script>
 </body>
